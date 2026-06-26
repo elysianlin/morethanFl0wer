@@ -1,0 +1,31 @@
+/* ═══════════════════════════════════════════════════════
+   VARIABLES — variables.css
+   Single source of truth for colors, fonts, and spacing.
+   Every other CSS file reads from these custom properties.
+═══════════════════════════════════════════════════════ */
+:root {
+  --cream:      #F5F2EC;
+  --cream-mid:  #EDE9E0;
+  --sage:       #7D9E82;
+  --sage-light: #C8D8C9;
+  --olive:      #4A6741;
+  --text:       #2C2C2C;
+  --muted:      #888880;
+  --border:     #D8D4CC;
+  --white:      #FFFFFF;
+
+  /* "amandine" = Typekit CSS name for the heading font */
+  --display: "amandine", sans-serif;
+  --body:    'Montserrat', sans-serif;
+
+  --top-bar-h: 42px;
+  --nav-h:     46px;
+  --header-h:  calc(var(--top-bar-h) + var(--nav-h));   /* 88px total */
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Status colors, used by toasts / form validation / badges */
+  --success: #4A6741;
+  --danger:  #B3261E;
+  --info:    #4493c0;
+}

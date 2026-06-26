@@ -1,0 +1,122 @@
+{
+  "_comment": "Drives Step 2 of the booking wizard (booking.js). Each entry becomes one clickable 'apick' card, built dynamically — no card markup lives in booking.html anymore.",
+
+  "mainFlowers": [
+    { "value": "rose", 
+      "label": "Rose", 
+      "price": 4.50, 
+      "image": "https://picsum.photos/seed/rose-stem/300/300",
+      "colors": [["Red","#e63030"],["Dark Red","#8b0000"],["Pink","#f4a0a0"],["Hot Pink","#ff69b4"],["White","#ffffff"],["Blush","#F9D5D3"],["Cream","#FFF5E1"],["Yellow","#F5C842"],["Peach","#FFCBA4"],["Coral","#FF6B6B"],["Lavender","#b07ed4"],["Orange","#ea8e17"],["Bicolor Pink-White","#f9d5e5"]] },
+
+    { "value": "tulip", 
+      "label": "Tulip", 
+      "price": 3.50, 
+      "image": "https://picsum.photos/seed/tulip-stem/300/300",
+      "colors": [["Red","#e63030"],["Pink","#f4a0a0"],["White","#ffffff"],["Yellow","#F5C842"],["Purple","#b07ed4"],["Orange","#ea8e17"],["Peach","#FFCBA4"],["Black","#2C2C2C"],["Bicolor Red-Yellow","#f5a623"]] },
+
+    { "value": "lily", 
+      "label": "Lily", 
+      "price": 5.00, 
+      "image": "https://picsum.photos/seed/lily-stem/300/300",
+      "colors": [["White","#ffffff"],["Pink","#f4a0a0"],["Orange","#ea8e17"],["Yellow","#F5C842"],["Peach","#FFCBA4"],["Purple","#b07ed4"],["Red","#e63030"],["Tiger Orange","#e87722"]] },
+      
+    { "value": "peony", "label": "Peony", "price": 6.50, "image": "https://picsum.photos/seed/peony-stem/300/300",
+      "colors": [["Pink","#f4a0a0"],["Hot Pink","#ff69b4"],["White","#ffffff"],["Blush","#F9D5D3"],["Coral","#FF6B6B"],["Red","#e63030"],["Peach","#FFCBA4"],["Magenta","#d63384"],["Burgundy","#800020"]] },
+    { "value": "sunflower", "label": "Sunflower", "price": 3.00, "image": "https://picsum.photos/seed/sunflower-stem/300/300",
+      "colors": [["Bright Yellow","#F5C842"],["Golden Yellow","#FFB800"],["Orange","#ea8e17"],["Cream","#FFF5E1"],["Pale Yellow","#fffacd"],["Brown Center","#c68642"]] },
+    { "value": "orchid", "label": "Orchid", "price": 8.00, "image": "https://picsum.photos/seed/orchid-stem/300/300",
+      "colors": [["White","#ffffff"],["Purple","#b07ed4"],["Deep Purple","#5c0f8b"],["Pink","#f4a0a0"],["Yellow","#F5C842"],["Peach","#FFCBA4"],["Green","#7DC85A"],["Blue","#4493c0"],["Spotted","#d4a5c9"]] },
+    { "value": "carnation", "label": "Carnation", "price": 6.00, "image": "https://picsum.photos/seed/carnation-stem/300/300",
+      "colors": [["Red","#e63030"],["Pink","#f4a0a0"],["White","#ffffff"],["Purple","#b07ed4"],["Yellow","#F5C842"],["Peach","#FFCBA4"],["Coral","#FF6B6B"],["Burgundy","#800020"],["Bicolor","#f9a8d4"],["Green","#7DC85A"]] },
+    { "value": "lily-of-the-valley", "label": "Lily of the Valley", "price": 3.00, "image": "https://picsum.photos/seed/lotv-stem/300/300",
+      "colors": [["White","#ffffff"],["Pale Pink","#fce4ec"],["Blush","#F9D5D3"]] },
+    { "value": "hydrangea", "label": "Hydrangea", "price": 10.00, "image": "https://picsum.photos/seed/hydrangea-stem/300/300",
+      "colors": [["Blue","#4493c0"],["Periwinkle","#9b8ec4"],["Pink","#f4a0a0"],["White","#ffffff"],["Purple","#b07ed4"],["Green","#7DC85A"],["Blush","#F9D5D3"],["Burgundy","#800020"],["Sky Blue","#87CEEB"]] },
+    { "value": "calla-lily", "label": "Calla Lily", "price": 5.50, "image": "https://picsum.photos/seed/callalily-stem/300/300",
+      "colors": [["White","#ffffff"],["Yellow","#F5C842"],["Pink","#f4a0a0"],["Purple","#b07ed4"],["Orange","#ea8e17"],["Black","#2C2C2C"],["Peach","#FFCBA4"],["Champagne","#f7e7ce"]] },
+    { "value": "morning-glory", "label": "Morning Glory", "price": 5.50, "image": "https://picsum.photos/seed/morningglory-stem/300/300",
+      "colors": [["Purple","#b07ed4"],["Blue","#4493c0"],["Pink","#f4a0a0"],["White","#ffffff"],["Magenta","#d63384"],["Bicolor Blue-White","#b3d9f5"]] },
+    { "value": "sakura", "label": "Sakura", "price": 7.50, "image": "https://picsum.photos/seed/sakura-stem/300/300",
+      "colors": [["Pale Pink","#fce4ec"],["Pink","#f4a0a0"],["Deep Pink","#ff69b4"],["White","#ffffff"],["Blush","#F9D5D3"]] }
+  ],
+
+  "fillers": [
+    { "value": "babys-breath", "label": "Baby's Breath", "price": 1.20, "image": "https://picsum.photos/seed/babysbreath/300/300",
+      "colors": [["White","#ffffff"],["Blush","#F9D5D3"],["Pink","#f4a0a0"],["Lilac","#D4B8E0"],["Purple","#b07ed4"]] },
+    { "value": "plum-flower", "label": "Plum Flower", "price": 3.50, "image": "https://picsum.photos/seed/plumflower/300/300",
+      "colors": [["White","#ffffff"],["Pink","#f4a0a0"],["Hot Pink","#ff69b4"],["Red","#e63030"],["Purple","#b07ed4"]] },
+    { "value": "statice", "label": "Statice", "price": 2.00, "image": "https://picsum.photos/seed/statice/300/300",
+      "colors": [["White","#ffffff"],["Lilac","#D4B8E0"],["Blue","#4493c0"],["Pink","#f4a0a0"],["Yellow","#F5C842"],["Purple","#b07ed4"],["Peach","#FFCBA4"]] },
+    { "value": "chamomile", "label": "Chamomile", "price": 1.30, "image": "https://picsum.photos/seed/chamomile/300/300",
+      "colors": [["White","#ffffff"],["Yellow","#F5C842"],["Cream","#FFF5E1"]] },
+    { "value": "daisy", "label": "Daisy", "price": 2.30, "image": "https://picsum.photos/seed/daisy/300/300",
+      "colors": [["White","#ffffff"],["Yellow","#F5C842"],["Pink","#f4a0a0"],["Peach","#FFCBA4"],["Cream","#FFF5E1"],["Lavender","#b07ed4"]] },
+    { "value": "freesia", "label": "Freesia", "price": 1.50, "image": "https://picsum.photos/seed/freesia/300/300",
+      "colors": [["White","#ffffff"],["Yellow","#F5C842"],["Pink","#f4a0a0"],["Purple","#b07ed4"],["Orange","#ea8e17"],["Red","#e63030"],["Peach","#FFCBA4"]] },
+    { "value": "forget-me-not", "label": "Forget Me Not", "price": 2.30, "image": "https://picsum.photos/seed/forgetmenot/300/300",
+      "colors": [["Blue","#4493c0"],["Sky Blue","#87CEEB"],["Pink","#f4a0a0"],["White","#ffffff"],["Lilac","#D4B8E0"]] },
+    { "value": "lavender", "label": "Lavender", "price": 1.00, "image": "https://picsum.photos/seed/lavenderfiller/300/300",
+      "colors": [["Purple","#b07ed4"],["Deep Purple","#5c0f8b"],["Lavender","#D4B8E0"],["White","#ffffff"],["Pink","#f4a0a0"]] },
+    { "value": "puff-flower", "label": "Puff Flower", "price": 1.00, "image": "https://picsum.photos/seed/puffflower/300/300",
+      "colors": [["White","#ffffff"],["Cream","#FFF5E1"],["Blush","#F9D5D3"],["Pink","#f4a0a0"],["Yellow","#F5C842"]] },
+    { "value": "strawberry-flower", "label": "Strawberry Flower", "price": 4.00, "image": "https://picsum.photos/seed/strawberryflower/300/300",
+      "colors": [["White","#ffffff"],["Pale Pink","#fce4ec"],["Cream","#FFF5E1"]] },
+    { "value": "narcissus", "label": "Narcissus", "price": 3.00, "image": "https://picsum.photos/seed/narcissus/300/300",
+      "colors": [["White","#ffffff"],["Yellow","#F5C842"],["Cream","#FFF5E1"],["Bicolor White-Yellow","#fffde7"]] },
+    { "value": "bell-shape-flower", "label": "Bell-Shape Flower", "price": 3.50, "image": "https://picsum.photos/seed/bellshape/300/300",
+      "colors": [["White","#ffffff"],["Pink","#f4a0a0"],["Purple","#b07ed4"],["Blue","#4493c0"],["Cream","#FFF5E1"]] }
+  ],
+
+  "foliage": [
+    { "value": "snowwillow", "label": "Snowwillow Leaves", "price": 2.00, "image": "https://picsum.photos/seed/snowwillow/300/300",
+      "colors": [["Silver Green","#b0b8b1"],["Pale Green","#c8d8c9"],["White","#ffffff"]] },
+    { "value": "eucalyptus", "label": "Eucalyptus", "price": 1.80, "image": "https://picsum.photos/seed/eucalyptus/300/300",
+      "colors": [["Green","#176e1d"],["Sage","#C8D8C9"],["Silver","#b0b8b1"],["Blue-Green","#5B8E8E"],["Dusty Green","#7a9e7e"]] },
+    { "value": "cymbidium-leaf", "label": "Cymbidium Leaf", "price": 1.20, "image": "https://picsum.photos/seed/cymbidium/300/300",
+      "colors": [["Green","#176e1d"],["Dark Green","#1a3d1a"],["Light Green","#7DC85A"],["Variegated","#c8d48a"]] },
+    { "value": "four-season-leaf", "label": "Four Season Leaf", "price": 1.50, "image": "https://picsum.photos/seed/fourseason/300/300",
+      "colors": [["Green","#176e1d"],["Sage","#C8D8C9"],["Dark Green","#1a3d1a"],["Burgundy Red","#800020"]] },
+    { "value": "lucky-bamboo", "label": "Lucky Bamboo", "price": 1.00, "image": "https://picsum.photos/seed/luckybamboo/300/300",
+      "colors": [["Green","#176e1d"],["Dark Green","#1a3d1a"],["Yellow-Green","#c8d48a"]] }
+  ],
+
+  "templates": [
+    { "value": "romantic",       "label": "Romantic",       "sub": "Rose & Peony",     "price": 55, "image": "https://picsum.photos/seed/tpl-romantic/400/300" },
+    { "value": "garden-fresh",   "label": "Garden Fresh",   "sub": "Wildflower Mix",   "price": 45, "image": "https://picsum.photos/seed/tpl-gardenfresh/400/300" },
+    { "value": "minimalist",     "label": "Minimalist",     "sub": "Single Stem",      "price": 35, "image": "https://picsum.photos/seed/tpl-minimalist/400/300" },
+    { "value": "lush-full",      "label": "Lush & Full",    "sub": "Tropical Blend",   "price": 65, "image": "https://picsum.photos/seed/tpl-lushfull/400/300" },
+    { "value": "pastel-dream",   "label": "Pastel Dream",   "sub": "Soft Tones",       "price": 48, "image": "https://picsum.photos/seed/tpl-pasteldream/400/300" },
+    { "value": "bold-statement", "label": "Bold Statement", "sub": "Vibrant Burst",    "price": 58, "image": "https://picsum.photos/seed/tpl-boldstatement/400/300" }
+  ],
+
+  "colorThemes": [
+    { "value": "blush-cream", "label": "Blush & Cream", "swatch": "#F9D5D3", "textColor": "#2C2C2C" },
+    { "value": "garden-sage", "label": "Garden Sage",   "swatch": "#C8D8C9", "textColor": "#2C2C2C" },
+    { "value": "bluesky",     "label": "BlueSky",       "swatch": "#b2d5e1", "textColor": "#2C2C2C" },
+    { "value": "golden-hour", "label": "Golden Hour",   "swatch": "#F5C842", "textColor": "#2C2C2C" }
+  ],
+
+  "addons": [
+    { "value": "vase",          "label": "Vase",            "price": 12 },
+    { "value": "chocolates",    "label": "Chocolates",      "price": 8 },
+    { "value": "teddy-bear",    "label": "Teddy Bear",      "price": 15 },
+    { "value": "greeting-card", "label": "Greeting card",   "price": 3 }
+  ],
+
+  "purposes": [
+    { "value": "gift",         "label": "Gift",         "sub": "For someone special" },
+    { "value": "wedding",      "label": "Wedding",      "sub": "Bridal & ceremony" },
+    { "value": "birthday",     "label": "Birthday",     "sub": "Celebrate a birthday" },
+    { "value": "anniversary",  "label": "Anniversary",  "sub": "Mark a milestone" },
+    { "value": "just-because", "label": "Just Because", "sub": "No reason needed" },
+    { "value": "sympathy",     "label": "Sympathy",     "sub": "Comfort & care" }
+  ],
+
+  "budgets": [
+    { "value": "under30", "label": "Under $30" },
+    { "value": "30-60",   "label": "$30–$60" },
+    { "value": "60-100",  "label": "$60–$100" },
+    { "value": "100-150", "label": "$100–$150" },
+    { "value": "150plus", "label": "$150+" }
+  ]
+}

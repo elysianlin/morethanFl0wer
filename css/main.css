@@ -1,0 +1,15 @@
+/* ═══════════════════════════════════════════════════════
+   MAIN.CSS — single entry point
+   Every page links ONLY this file. Order matters:
+   variables → base → shared chrome → page-specific.
+═══════════════════════════════════════════════════════ */
+@import url("variables.css");
+@import url("base.css");
+@import url("header.css");
+@import url("footer.css");
+@import url("toast.css");
+@import url("home.css");
+@import url("flowers.css");
+@import url("flower-detail.css");
+@import url("booking.css");
+@import url("account.css");

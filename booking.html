@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <title>Booking — More Than Fl0wers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="icon" href="images/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://use.typekit.net/ufc8obc.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <script defer src="js/api.js"></script>
+  <script defer src="js/toast.js"></script>
+  <script defer src="js/header.js"></script>
+  <script defer src="js/booking.js"></script>
+</head>
+<body>
+
+  <div class="price-badge" id="priceBadge">
+    <span class="price-badge-label">Estimated</span>
+    <span class="price-badge-amount" id="priceBadgeAmt">$0.00</span>
+  </div>
+
+  <div class="top-bar">
+    <button class="top-bar-btn" id="searchToggle" aria-label="Open search">SEARCH</button>
+    <a href="index.html" class="logo">More Than Fl0wers</a>
+    <div class="top-bar-right">
+      <a href="account.html" class="top-bar-btn" id="accountLink" aria-label="Account">ACCOUNT</a>
+      <button class="icon-btn" aria-label="Wishlist">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
+      </button>
+      <button class="icon-btn cart-btn" aria-label="Cart">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="index.html"   class="nav-link">HOME</a>
+      <a href="flowers.html" class="nav-link">FLOWERS</a>
+      <a href="booking.html" class="nav-link active">BOOKING</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="index.html"   class="nav-link">HOME</a>
+      <a href="flowers.html" class="nav-link">FLOWERS</a>
+      <a href="booking.html" class="nav-link active">BOOKING</a>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <button class="search-close" id="searchClose" aria-label="Close">✕</button>
+    <div class="search-form">
+      <input type="text" class="search-input" placeholder="Search flowers…" aria-label="Search" />
+      <div class="search-results"></div>
+    </div>
+  </div>
+
+  <main class="booking-main">
+    <div class="booking-wrap">
+
+      <nav class="progress-bar" aria-label="Booking steps">
+        <div class="prog-line"></div>
+        <button class="prog-step active" data-step="1"><span class="prog-num">1</span><span class="prog-label">Order Type</span></button>
+        <button class="prog-step"        data-step="2"><span class="prog-num">2</span><span class="prog-label">Customise</span></button>
+        <button class="prog-step"        data-step="3"><span class="prog-num">3</span><span class="prog-label">Requirements</span></button>
+        <button class="prog-step"        data-step="4"><span class="prog-num">4</span><span class="prog-label">Checkout</span></button>
+      </nav>
+
+      <!-- STEP 1 -->
+      <section class="bstep" id="step1">
+        <h1 class="bstep-title">How would you like your flowers?</h1>
+        <div class="order-type-grid">
+
+          <label class="ot-card" data-value="custom">
+            <input type="radio" name="orderType" value="custom" hidden />
+            <div class="ot-img" data-img-wrap><img src="https://picsum.photos/seed/ot-custom/400/300" alt="" /><div class="ot-img-placeholder"></div></div>
+            <div class="ot-body"><p class="ot-name">Fully<br/>Customized</p><p class="ot-sub">from scratch<br/>Build your bouquet</p></div>
+            <span class="ot-check" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </label>
+
+          <label class="ot-card" data-value="template">
+            <input type="radio" name="orderType" value="template" hidden />
+            <div class="ot-img" data-img-wrap><img src="https://picsum.photos/seed/ot-template/400/300" alt="" /><div class="ot-img-placeholder"></div></div>
+            <div class="ot-body"><p class="ot-name">Shop<br/>Templates</p><p class="ot-sub">curated designs<br/>Pick from our</p></div>
+            <span class="ot-check" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </label>
+
+          <label class="ot-card" data-value="surprise">
+            <input type="radio" name="orderType" value="surprise" hidden />
+            <div class="ot-img" data-img-wrap><img src="https://picsum.photos/seed/ot-surprise/400/300" alt="" /><div class="ot-img-placeholder"><span class="surprise-qmark">?</span></div></div>
+            <div class="ot-body"><p class="ot-name">Surprise<br/>Me!</p><p class="ot-sub">something magical<br/>Let us create</p></div>
+            <span class="ot-check" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+          </label>
+
+        </div>
+        <p class="bstep-hint">Your next step will change based on your selection above.</p>
+        <div class="bstep-nav"><div></div><button class="bbtn bbtn-primary" id="step1Next">Next Step →</button></div>
+      </section>
+
+      <!-- STEP 2A — FULLY CUSTOMIZED -->
+      <section class="bstep" id="step2custom" style="display:none">
+        <h1 class="bstep-title">Fully Customized</h1>
+        <p class="bstep-sub">Build your perfect bouquet step by step</p>
+
+        <div class="bsection">
+          <h2 class="bsection-title">Select Main Flowers</h2>
+          <p class="bsection-hint">Choose 1–3 main flowers · Click to set colour &amp; quantity</p>
+          <!-- Cards built from data/booking-items.json → mainFlowers -->
+          <div class="addon-pick-grid" id="mainFlowersGrid"></div>
+        </div>
+
+        <div class="bsection">
+          <h2 class="bsection-title">Select Filler Flowers</h2>
+          <p class="bsection-hint">Click to choose colour &amp; quantity · Each variety adds to your total</p>
+          <div class="addon-pick-grid" id="fillerFlowersGrid"></div>
+        </div>
+
+        <div class="bsection">
+          <h2 class="bsection-title">Select Foliage</h2>
+          <p class="bsection-hint">Click to choose colour &amp; quantity</p>
+          <div class="addon-pick-grid" id="foliageGrid"></div>
+        </div>
+
+        <div class="bsection">
+          <h2 class="bsection-title">Purpose of Flowers</h2>
+          <div class="radio-grid" id="purposeGrid"></div>
+        </div>
+
+        <div class="bstep-nav">
+          <button class="bbtn bbtn-ghost" data-back="step1">← Back</button>
+          <button class="bbtn bbtn-primary" data-next="step3">Next Step →</button>
+        </div>
+      </section>
+
+      <!-- STEP 2B — SHOP TEMPLATES -->
+      <section class="bstep" id="step2template" style="display:none">
+        <h1 class="bstep-title">Shop Templates</h1>
+        <p class="bstep-sub">Pick a design, then choose your color theme</p>
+        <div class="bsection">
+          <h2 class="bsection-title">Choose a Template</h2>
+          <!-- Cards built from data/booking-items.json → templates -->
+          <div class="template-grid" id="templateGrid"></div>
+        </div>
+        <div class="bsection">
+          <h2 class="bsection-title">Select Color Theme</h2>
+          <div class="theme-row" id="colorThemeRow"></div>
+        </div>
+        <div class="bstep-nav">
+          <button class="bbtn bbtn-ghost" data-back="step1">← Back</button>
+          <button class="bbtn bbtn-primary" data-next="step3">Next Step →</button>
+        </div>
+      </section>
+
+      <!-- STEP 2C — SURPRISE ME -->
+      <section class="bstep" id="step2surprise" style="display:none">
+        <h1 class="bstep-title">Surprise Me!</h1>
+        <p class="bstep-sub">Tell us the occasion and we'll handle the rest</p>
+        <div class="surprise-illus" data-img-wrap><img src="https://picsum.photos/seed/surprise-illus/400/300" alt="" /><div class="surprise-placeholder"><span>Surprise Illustration</span></div></div>
+        <div class="bsection">
+          <h2 class="bsection-title">Purpose of Flowers</h2>
+          <div class="purpose-grid" id="purposeSGrid"></div>
+        </div>
+        <div class="bsection">
+          <h2 class="bsection-title">Budget Range</h2>
+          <div class="budget-row" id="budgetRow"></div>
+        </div>
+        <div class="bstep-nav">
+          <button class="bbtn bbtn-ghost" data-back="step1">← Back</button>
+          <button class="bbtn bbtn-primary" data-next="step3">Next Step →</button>
+        </div>
+      </section>
+
+      <!-- STEP 3 — REQUIREMENTS -->
+      <section class="bstep" id="step3" style="display:none">
+        <h1 class="bstep-title">Special Requirements</h1>
+        <p class="bstep-sub">Let us know about any preferences</p>
+
+        <div class="bsection">
+          <h2 class="bsection-title">Comment <span class="optional">(optional)</span></h2>
+          <p class="bsection-hint">Any special requirements or additional instructions</p>
+          <textarea class="bmsg" name="cardMessage" rows="4"></textarea>
+        </div>
+
+        <div class="bsection">
+          <h2 class="bsection-title">Add-ons</h2>
+          <div class="check-grid">
+
+            <div class="addon-card" id="addonGreeting">
+              <label class="bcheck addon-card-trigger">
+                <input type="checkbox" name="addon" value="greeting-card" data-price="3" id="cbGreeting" />
+                <span>Greeting card <em>+$3</em></span>
+              </label>
+              <div class="addon-card-panel" id="greetingPanel">
+                <p class="addon-card-hint">Write your message below — we'll print it on the card ✦</p>
+                <div class="greeting-card-preview">
+                  <div class="gcard-inner">
+                    <div class="gcard-lines"><span></span><span></span><span></span><span></span></div>
+                    <textarea class="gcard-textarea" id="greetingText" name="greetingMessage" maxlength="200"
+                      placeholder="e.g. Happy Birthday! Wishing you all the joy in the world"></textarea>
+                    <div class="gcard-counter"><span id="greetingCount">0</span> / 200</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vase / Chocolates / Teddy Bear built from data/booking-items.json → addons -->
+            <div id="addonExtras" style="display:contents"></div>
+          </div>
+        </div>
+
+        <div class="bstep-nav">
+          <button class="bbtn bbtn-ghost" id="step3Back">← Back</button>
+          <button class="bbtn bbtn-primary" data-next="step4">Next Step →</button>
+        </div>
+      </section>
+
+      <!-- STEP 4 — CHECKOUT -->
+      <section class="bstep" id="step4" style="display:none">
+        <h1 class="bstep-title">Checkout &amp; Delivery</h1>
+        <p class="bstep-sub">Almost there! Fill in your details to complete your order.</p>
+        <div class="checkout-grid">
+          <div class="checkout-form">
+            <div class="bsection">
+              <h2 class="bsection-title">Personal Information</h2>
+              <div class="form-field"><label>Full Name</label><input type="text" name="fullName" placeholder="Jane Smith" /></div>
+              <div class="form-field"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 (555) 000-0000" /></div>
+              <div class="form-field"><label>Email</label><input type="email" name="email" placeholder="jane@gmail.com" /></div>
+            </div>
+            <div class="bsection">
+              <h2 class="bsection-title">Delivery Method</h2>
+              <div class="delivery-options">
+                <label class="deliv-opt"><input type="radio" name="delivery" value="standard" checked /><div class="deliv-body"><strong>Standard Delivery</strong><span>3–5 days · Free</span></div></label>
+                <label class="deliv-opt"><input type="radio" name="delivery" value="express"  /><div class="deliv-body"><strong>Express Delivery</strong><span>Next day · $9.99</span></div></label>
+                <label class="deliv-opt"><input type="radio" name="delivery" value="pickup"   /><div class="deliv-body"><strong>Pick Up</strong><span>From our store · Free</span></div></label>
+              </div>
+            </div>
+            <div class="bsection">
+              <h2 class="bsection-title">Delivery Date &amp; Time</h2>
+              <div class="form-row">
+                <div class="form-field"><label>Date</label><input type="text" name="delivDate" placeholder="MM / DD / YYYY" /></div>
+                <div class="form-field"><label>Time Slot</label><select name="delivTime"><option value="">Select time…</option><option>9:00 AM – 12:00 PM</option><option>12:00 PM – 3:00 PM</option><option>3:00 PM – 6:00 PM</option></select></div>
+              </div>
+            </div>
+            <div class="bsection">
+              <h2 class="bsection-title">Delivery Address</h2>
+              <div class="form-field"><label>Street Address</label><input type="text" name="street" placeholder="123 Main Street" /></div>
+              <div class="form-field"><label>City / ZIP</label><input type="text" name="cityzip" placeholder="New York, NY 10001" /></div>
+            </div>
+          </div>
+          <div class="checkout-side">
+            <div class="bsection">
+              <h2 class="bsection-title">Order Summary</h2>
+              <div class="order-summary-box">
+                <div class="os-img" data-img-wrap><img src="https://picsum.photos/seed/order-summary/400/225" alt="Your order" /><div class="os-img-placeholder"></div></div>
+                <p class="os-title" id="osSummaryTitle">Your Bouquet</p>
+                <p class="os-detail" id="osSummaryDetail">Your selections will appear here</p>
+                <hr class="os-hr" />
+                <div id="osPriceLines"></div>
+                <hr class="os-hr" />
+                <div class="os-total"><span>Total</span><span id="osTotal">$0.00</span></div>
+              </div>
+            </div>
+            <div class="bsection">
+              <h2 class="bsection-title">Payment Method</h2>
+              <div class="pay-options">
+                <label class="pay-opt"><input type="radio" name="payment" value="credit" checked /><div class="pay-body"><strong>Credit Card</strong><span>Visa / Mastercard</span></div></label>
+                <label class="pay-opt"><input type="radio" name="payment" value="paypal" /><div class="pay-body"><strong>PayPal</strong><span>Pay with PayPal</span></div></label>
+                <label class="pay-opt"><input type="radio" name="payment" value="apple"  /><div class="pay-body"><strong>Apple Pay</strong><span>Touch ID</span></div></label>
+              </div>
+              <div class="card-fields" id="cardFields">
+                <div class="form-field"><label>Card Number</label><input type="text" name="cardNum" placeholder="1234  5678  9012  3456" maxlength="19" /></div>
+                <div class="form-row">
+                  <div class="form-field"><label>Expiry</label><input type="text" name="expiry" placeholder="MM / YY" maxlength="7" /></div>
+                  <div class="form-field"><label>CVV</label><input type="text" name="cvv" placeholder="•••" maxlength="4" /></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="place-order-wrap">
+          <button class="bbtn bbtn-ghost" data-back="step3">← Back</button>
+          <button class="place-order-btn" id="placeOrderBtn">Place Order</button>
+        </div>
+        <p class="legal-note">By placing your order you agree to our Terms &amp; Conditions and Privacy Policy.</p>
+      </section>
+
+      <!-- SUCCESS -->
+      <section class="bstep" id="stepSuccess" style="display:none">
+        <div class="success-wrap">
+          <div class="success-icon"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg></div>
+          <h1 class="bstep-title">Order Placed!</h1>
+          <p class="bstep-sub">Thank you! We've received your order and saved it to your account.</p>
+          <a href="dashboard.html" class="bbtn bbtn-primary" style="margin-top:32px;">View My Orders</a>
+          <a href="index.html" class="bbtn bbtn-ghost" style="margin-top:12px;">Back to Home</a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-brand"><a href="index.html" class="footer-logo">
+          <img src="images/logo-white.png" alt="M0re Than Fl0wers logo" />
+        </a><p>Handcrafted yarn flowers<br />made to last a lifetime.</p></div>
+      <div class="footer-col"><h4 class="footer-heading">Navigate</h4><ul><li><a href="index.html">Home</a></li><li><a href="flowers.html">Flowers</a></li><li><a href="booking.html">Booking</a></li></ul></div>
+      <div class="footer-col"><h4 class="footer-heading">Info</h4><ul><li><a href="#">About Us</a></li><li><a href="#">FAQ</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div class="footer-col"><h4 class="footer-heading">Follow Us</h4><div class="social-row"><a href="https://www.instagram.com/m0re.than.flowers/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a><a href="#" class="social-btn" aria-label="Facebook"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a><a href="#" class="social-btn xhs" aria-label="小红书"><span>小红书</span></a></div></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 More Than Fl0wers · All rights reserved.</p></div>
+  </footer>
+
+</body>
+</html>

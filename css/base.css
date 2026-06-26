@@ -1,0 +1,124 @@
+/* ═══════════════════════════════════════════════════════
+   BASE — base.css
+   Reset, typography, layout helpers, buttons, scroll-reveal.
+═══════════════════════════════════════════════════════ */
+
+/* ── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+img    { display: block; max-width: 100%; height: auto; }
+a      { text-decoration: none; color: inherit; }
+ul     { list-style: none; }
+button { cursor: pointer; background: none; border: none; font: inherit; }
+input, textarea, select { font: inherit; }
+
+/* ── Base ──────────────────────────────────────────────── */
+html { scroll-behavior: smooth; overflow-x: hidden; }
+
+body {
+  font-family: var(--body);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--text);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+p { line-height: 1.75; }
+
+/* ── Layout helpers ────────────────────────────────────── */
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.text-center { text-align: center; }
+.section     { padding: 88px 0; }
+.hidden      { display: none !important; }
+
+/* ── Scroll-reveal ─────────────────────────────────────────
+   Elements are VISIBLE by default.
+   JS adds .js-loaded to <body> — only then do we hide them.
+   This means if JS fails or is slow, nothing is ever hidden.
+   ─────────────────────────────────────────────────────── */
+.reveal {
+  transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
+}
+.js-loaded .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+}
+.js-loaded .reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.js-loaded .reveal-delay-1.visible { transition-delay: 0.13s; }
+.js-loaded .reveal-delay-2.visible { transition-delay: 0.26s; }
+.js-loaded .reveal-delay-3.visible { transition-delay: 0.39s; }
+
+/* ── Buttons ───────────────────────────────────────────── */
+.btn {
+  display: inline-block;
+  font-family: var(--body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 12px 32px;
+  border: 1px solid transparent;
+  transition: background 0.25s var(--ease),
+              color 0.25s var(--ease),
+              border-color 0.25s var(--ease);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--text);
+  border-radius: 40px;
+}
+.btn-outline:hover {
+  background: var(--text);
+  color: var(--white);
+}
+.btn-solid {
+  background: var(--text);
+  color: var(--white);
+  border-color: var(--text);
+  border-radius: 40px;
+}
+.btn-solid:hover { background: var(--olive); border-color: var(--olive); }
+
+/* ── Generic empty/placeholder image fallback ──────────────
+   JS (common.js) listens for img "error" events and adds the
+   "no-img" class to the closest [data-img-wrap] ancestor —
+   this is what replaced every inline onerror="" attribute.
+─────────────────────────────────────────────────────────── */
+[data-img-wrap] { position: relative; background: var(--cream-mid); overflow: hidden; }
+[data-img-wrap].no-img img { display: none; }
+
+/* ── Skeleton loading shimmer (used while JSON data loads) ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--cream-mid) 25%, var(--border) 37%, var(--cream-mid) 63%);
+  background-size: 400% 100%;
+  animation: skeletonShine 1.4s ease infinite;
+}
+@keyframes skeletonShine {
+  0%   { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 20px; }
+  .section   { padding: 60px 0; }
+}

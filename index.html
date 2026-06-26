@@ -1,1 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <title>More Than Fl0wers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="icon" href="images/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Adobe Fonts (Typekit): amandine heading font + cosan warm g4 fallback -->
+  <link rel="stylesheet" href="https://use.typekit.net/ufc8obc.css" />
+  <!-- Google Fonts: Montserrat body font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 
+  <!-- Core scripts: data/auth layer + toasts + shared chrome, loaded on every page -->
+  <script defer src="js/api.js"></script>
+  <script defer src="js/toast.js"></script>
+  <script defer src="js/header.js"></script>
+  <script defer src="js/home.js"></script>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════════
+       TOP UTILITY BAR
+  ══════════════════════════════════════ -->
+  <div class="top-bar">
+    <button class="top-bar-btn" id="searchToggle" aria-label="Open search">SEARCH</button>
+    <a href="index.html" class="logo">More Than Fl0wers</a>
+    <div class="top-bar-right">
+      <a href="account.html" class="top-bar-btn" id="accountLink" aria-label="Account">ACCOUNT</a>
+      <button class="icon-btn" aria-label="Wishlist">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/>
+        </svg>
+      </button>
+      <button class="icon-btn cart-btn" aria-label="Cart">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       MAIN NAV
+  ══════════════════════════════════════ -->
+  <header class="site-header" id="siteHeader">
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="index.html"   class="nav-link active">HOME</a>
+      <a href="flowers.html" class="nav-link">FLOWERS</a>
+      <a href="booking.html" class="nav-link">BOOKING</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="index.html"   class="nav-link active">HOME</a>
+      <a href="flowers.html" class="nav-link">FLOWERS</a>
+      <a href="booking.html" class="nav-link">BOOKING</a>
+    </div>
+  </header>
+
+  <!-- Search overlay -->
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <button class="search-close" id="searchClose" aria-label="Close search">✕</button>
+    <div class="search-form">
+      <input type="text" class="search-input" placeholder="Search flowers…" aria-label="Search" />
+      <div class="search-results"></div>
+    </div>
+  </div>
+
+  <main>
+
+    <section class="hero" aria-label="Hero banner">
+      <div class="hero-visual" aria-hidden="true">
+        <img src="https://res.cloudinary.com/ddib2y7zi/image/upload/f_auto,q_auto/header_hhjkzh" alt="" class="hero-img" />
+      </div>
+      <div class="hero-copy">
+        <h1 class="hero-title-left hero-lace-box reveal">More Than Fl0wers</h1>
+        <a href="flowers.html" class="btn btn-outline reveal">SHOP NOW</a>
+      </div>
+    </section>
+
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <!-- BEST SELLING FLOWERS — rendered from data/flowers.json by js/home.js -->
+    <section class="section best-selling" aria-labelledby="bestTitle">
+      <div class="container">
+
+        <h2 class="section-title text-center reveal" id="bestTitle">Best Selling Flowers</h2>
+
+        <div class="tab-bar reveal" role="tablist">
+          <button class="tab active" role="tab" aria-selected="true"
+            data-tab="flowers" id="tab-flowers" aria-controls="panel-flowers">
+            Flowers
+          </button>
+        </div>
+
+        <div class="tab-panel active" id="panel-flowers" role="tabpanel" aria-labelledby="tab-flowers">
+          <div class="product-grid" id="bestSellingGrid">
+            <!-- JS-rendered product cards appear here -->
+          </div>
+        </div>
+
+        <div class="view-all-wrap reveal">
+          <a href="flowers.html" class="view-all-link">View All Flowers</a>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section why-us" aria-labelledby="whyTitle">
+      <div class="container">
+        <div class="why-grid">
+
+          <div class="why-text">
+            <p class="why-eyebrow reveal">Our Promise</p>
+            <h2 class="why-title reveal reveal-delay-1" id="whyTitle">Why Choose Us?</h2>
+            <p class="why-body reveal reveal-delay-1">
+              Every flower we create is a labour of love — hand-crocheted from premium
+              yarn to capture the beauty of nature without the worry of wilting.
+              Whether it is a gift for someone special or a decoration for your space,
+              our flowers are crafted to be treasured forever.
+            </p>
+
+            <ul class="why-list">
+              <li class="why-item reveal reveal-delay-2">
+                <span class="why-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/>
+                  </svg>
+                </span>
+                <div>
+                  <strong>Handcrafted with care</strong>
+                  <p>Each piece is made by hand using soft, premium yarn fibres.</p>
+                </div>
+              </li>
+              <li class="why-item reveal reveal-delay-2">
+                <span class="why-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                </span>
+                <div>
+                  <strong>Lasts forever</strong>
+                  <p>No wilting, no watering — your bouquet stays beautiful always.</p>
+                </div>
+              </li>
+              <li class="why-item reveal reveal-delay-3">
+                <span class="why-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M3 9h18M9 21V9"/>
+                  </svg>
+                </span>
+                <div>
+                  <strong>Fully customizable</strong>
+                  <p>Choose your flowers, colours, and arrangement to match your vision.</p>
+                </div>
+              </li>
+            </ul>
+
+            <a href="booking.html" class="btn btn-outline reveal reveal-delay-3">Book Now</a>
+          </div>
+
+          <div class="why-img-wrap reveal reveal-delay-2" data-img-wrap>
+            <img src="https://res.cloudinary.com/ddib2y7zi/image/upload/f_auto,q_auto/why-us_k1mq03" alt="Close-up of handcrafted yarn flowers" class="why-img" />
+            <div class="why-img-placeholder" aria-hidden="true">
+              <span class="ph-text">Image</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner container">
+
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <img src="images/logo-white.png" alt="M0re Than Fl0wers logo" />
+        </a>
+        <p>Handcrafted yarn flowers<br />made to last a lifetime.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="flowers.html">Flowers</a></li>
+          <li><a href="booking.html">Booking</a></li>
+          <li><a href="#">Our Story</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4 class="footer-heading">Follow Us</h4>
+        <div class="social-row">
+          <a href="https://www.instagram.com/m0re.than.flowers/" target="_blank" rel="noopener"
+             class="social-btn" aria-label="Instagram">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <circle cx="12" cy="12" r="5"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://www.xiaohongshu.com/user/profile/5db40df20000000001009532?xsec_token=ABRt79KDJ3jw00j9lClppdAQ-5cWVTqZh1h7QFiwnCAWI%3D&xsec_source=pc_search"
+             target="_blank" rel="noopener"
+             class="social-btn xhs" aria-label="小红书">
+            <span>小红书</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 More Than Fl0wers · All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+/* ═══════════════════════════════════════════════════════
+   HEADER — header.css
+   Top utility bar + main nav + mobile drawer + search overlay.
+   Shared by every page (injected via header.js).
+═══════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════
+   TOP UTILITY BAR
+══════════════════════════════════════════════════════════ */
+.top-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 300;
+  height: var(--top-bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  background: rgba(245, 242, 236, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.top-bar-btn {
+  font-family: var(--body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: var(--text);
+  transition: color 0.2s;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top-bar-btn:hover { color: var(--sage); }
+
+.logo {
+  font-family: var(--display);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 30px;
+  letter-spacing: 0.3rem;
+  color: var(--text);
+  white-space: nowrap;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+  position: relative;
+  transition: color 0.2s;
+}
+.icon-btn:hover { color: var(--sage); }
+
+.cart-badge {
+  position: absolute;
+  top: 2px; right: 2px;
+  width: 14px; height: 14px;
+  background: var(--sage);
+  color: var(--white);
+  font-size: 8px;
+  font-weight: 600;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+@keyframes badgePop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+.cart-badge.pop { animation: badgePop 0.35s ease; }
+
+/* ══════════════════════════════════════════════════════════
+   MAIN NAV
+══════════════════════════════════════════════════════════ */
+.site-header {
+  position: fixed;
+  top: var(--top-bar-h);
+  left: 0; right: 0;
+  z-index: 299;
+  height: var(--nav-h);
+  background: rgba(245, 242, 236, 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px;
+  transition: box-shadow 0.2s;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-link {
+  font-family: var(--body);
+  font-size: 10.5px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  padding-bottom: 3px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text);
+  border-bottom-color: var(--text);
+}
+
+/* ── Hamburger (mobile) ──────────────────────────────── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+  position: absolute;
+  right: 20px;
+}
+.hamburger span {
+  display: block;
+  width: 22px; height: 1.5px;
+  background: var(--text);
+  transition: transform 0.3s var(--ease), opacity 0.3s;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Mobile drawer */
+.mobile-nav {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 28px 24px;
+  background: var(--cream);
+  border-top: 1px solid var(--border);
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  box-shadow: 0 8px 24px rgba(44,44,44,0.08);
+}
+.mobile-nav .nav-link { font-size: 13px; }
+
+/* ══════════════════════════════════════════════════════════
+   SEARCH OVERLAY
+   Hidden by default via display:none. JS adds .open to show it.
+══════════════════════════════════════════════════════════ */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(245, 242, 236, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.search-overlay.open { display: flex; }
+
+.search-close {
+  position: absolute;
+  top: 28px; right: 32px;
+  font-size: 22px;
+  color: var(--muted);
+  transition: color 0.2s;
+  padding: 4px;
+}
+.search-close:hover { color: var(--text); }
+
+.search-form { width: min(600px, 80vw); }
+.search-input {
+  border: none;
+  border-bottom: 1px solid var(--text);
+  background: transparent;
+  font-family: var(--display);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 32px;
+  color: var(--text);
+  width: 100%;
+  outline: none;
+  padding: 12px 0;
+  text-align: center;
+}
+.search-input::placeholder { color: var(--border); }
+.search-results {
+  margin-top: 18px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.search-result-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 4px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  transition: color 0.2s;
+}
+.search-result-item:hover { color: var(--sage); }
+.search-empty { text-align: center; color: var(--muted); font-size: 12px; margin-top: 14px; }
+
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    --top-bar-h: 40px;
+    --nav-h:     44px;
+  }
+
+  .top-bar { padding: 0 16px; }
+
+  .logo {
+    font-size: 15px;
+    letter-spacing: 0.1em;
+  }
+
+  /* Hide ACCOUNT text on mobile — icons only */
+  .top-bar-btn:not(#searchToggle) {
+    display: none;
+  }
+
+  .main-nav        { display: none; }
+  .hamburger       { display: flex; }
+  .mobile-nav.open { display: flex; }
+}

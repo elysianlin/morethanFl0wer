@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <title>Flowers — More Than Fl0wers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="icon" href="images/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://use.typekit.net/ufc8obc.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <script defer src="js/api.js"></script>
+  <script defer src="js/toast.js"></script>
+  <script defer src="js/header.js"></script>
+  <script defer src="js/flowers.js"></script>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <button class="top-bar-btn" id="searchToggle" aria-label="Open search">SEARCH</button>
+    <a href="index.html" class="logo">More Than Fl0wers</a>
+    <div class="top-bar-right">
+      <a href="account.html" class="top-bar-btn" id="accountLink" aria-label="Account">ACCOUNT</a>
+      <button class="icon-btn" aria-label="Wishlist">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
+      </button>
+      <button class="icon-btn cart-btn" aria-label="Cart">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header class="site-header" id="siteHeader">
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="index.html"   class="nav-link">HOME</a>
+      <a href="flowers.html" class="nav-link active">FLOWERS</a>
+      <a href="booking.html" class="nav-link">BOOKING</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="index.html"   class="nav-link">HOME</a>
+      <a href="flowers.html" class="nav-link active">FLOWERS</a>
+      <a href="booking.html" class="nav-link">BOOKING</a>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <button class="search-close" id="searchClose" aria-label="Close">✕</button>
+    <div class="search-form">
+      <input type="text" class="search-input" placeholder="Search flowers…" aria-label="Search" />
+      <div class="search-results"></div>
+    </div>
+  </div>
+
+  <!-- SHOP PAGE -->
+  <div class="shop-page">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar" aria-label="Filters">
+
+      <nav class="breadcrumb">
+        <a href="index.html">Home</a> <span>/</span>
+        <span aria-current="page">Flowers</span>
+      </nav>
+
+      <h1 class="shop-title">Flowers</h1>
+      <hr class="filter-hr" />
+
+      <button class="filter-clear" id="filterClear">Clear all</button>
+      <hr class="filter-hr" />
+
+      <!-- PRICE -->
+      <div class="filter-group">
+        <button class="filter-header" aria-expanded="true" aria-controls="fp-price">
+          <span>Price Range</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="filter-body" id="fp-price">
+          <label class="fcheck"><input type="checkbox" name="price" data-min="0"   data-max="30"  /> <span>Under $30</span></label>
+          <label class="fcheck"><input type="checkbox" name="price" data-min="30"  data-max="60"  /> <span>$30 – $60</span></label>
+          <label class="fcheck"><input type="checkbox" name="price" data-min="60"  data-max="100" /> <span>$60 – $100</span></label>
+          <label class="fcheck"><input type="checkbox" name="price" data-min="100" data-max="999" /> <span>$100+</span></label>
+        </div>
+      </div>
+      <hr class="filter-hr" />
+
+      <!-- CATEGORY -->
+      <div class="filter-group">
+        <button class="filter-header" aria-expanded="true" aria-controls="fp-cat">
+          <span>Category</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="filter-body" id="fp-cat">
+          <label class="fcheck">
+            <input type="checkbox" name="category" value="bouquet" />
+            <span>Bouquet</span>
+            <em class="fcount" data-cat="bouquet"></em>
+          </label>
+          <label class="fcheck">
+            <input type="checkbox" name="category" value="single" />
+            <span>Single Stem</span>
+            <em class="fcount" data-cat="single"></em>
+          </label>
+          <label class="fcheck">
+            <input type="checkbox" name="category" value="arrangement" />
+            <span>Arrangement</span>
+            <em class="fcount" data-cat="arrangement"></em>
+          </label>
+        </div>
+      </div>
+      <hr class="filter-hr" />
+
+      <!-- COLOR -->
+      <div class="filter-group">
+        <button class="filter-header" aria-expanded="true" aria-controls="fp-color">
+          <span>Color</span>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="filter-body" id="fp-color">
+          <!-- data-color MUST be lowercase and match the colour names used in data/flowers.json -->
+          <div class="color-row" data-color="white"><span class="dot" style="background:#fff;border:1.5px solid #D8D4CC;"></span><span class="dot-label">White</span><em class="fcount" data-col="white"></em></div>
+          <div class="color-row" data-color="red"><span class="dot" style="background:#b71a12;"></span><span class="dot-label">Red</span><em class="fcount" data-col="red"></em></div>
+          <div class="color-row" data-color="pink"><span class="dot" style="background:#e66565;"></span><span class="dot-label">Pink</span><em class="fcount" data-col="pink"></em></div>
+          <div class="color-row" data-color="purple"><span class="dot" style="background:#D4B8E0;"></span><span class="dot-label">Purple</span><em class="fcount" data-col="purple"></em></div>
+          <div class="color-row" data-color="green"><span class="dot" style="background:#176e1d;"></span><span class="dot-label">Green</span><em class="fcount" data-col="green"></em></div>
+          <div class="color-row" data-color="yellow"><span class="dot" style="background:#F5C842;"></span><span class="dot-label">Yellow</span><em class="fcount" data-col="yellow"></em></div>
+          <div class="color-row" data-color="orange"><span class="dot" style="background:#ea8e17;"></span><span class="dot-label">Orange</span><em class="fcount" data-col="orange"></em></div>
+          <div class="color-row" data-color="blue"><span class="dot" style="background:#4493c0;"></span><span class="dot-label">Blue</span><em class="fcount" data-col="blue"></em></div>
+          <div class="color-row" data-color="dark"><span class="dot" style="background:#2C2C2C;"></span><span class="dot-label">Dark</span><em class="fcount" data-col="dark"></em></div>
+        </div>
+      </div>
+      <hr class="filter-hr" />
+
+    </aside>
+
+    <!-- MAIN -->
+    <div class="shop-main">
+
+      <div class="shop-toolbar">
+        <p class="result-count" id="resultCount"></p>
+        <div class="toolbar-right">
+          <select class="sort-select" id="sortSelect">
+            <option value="default">Default</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A → Z</option>
+          </select>
+          <button class="mobile-filter-btn" id="mobileFilterBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+            Filters
+          </button>
+        </div>
+      </div>
+
+      <div class="chips-row" id="chipsRow"></div>
+
+      <!--
+        Flower cards are built entirely by js/flowers.js from
+        data/flowers.json — no product markup lives here anymore.
+      -->
+      <div class="flowers-grid" id="flowersGrid"></div>
+
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <p>No flowers match your filters.</p>
+        <button class="filter-clear" id="emptyStateClear">Clear all filters</button>
+      </div>
+
+      <nav class="pagination" id="pagination">
+        <button class="page-btn page-next" id="pageNext" aria-label="Next page">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </nav>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <img src="images/logo-white.png" alt="M0re Than Fl0wers logo" />
+        </a>
+        <p>Handcrafted yarn flowers<br />made to last a lifetime.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navigate</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="flowers.html">Flowers</a></li>
+          <li><a href="booking.html">Booking</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Follow Us</h4>
+        <div class="social-row">
+          <a href="https://www.instagram.com/m0re.than.flowers/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="https://www.xiaohongshu.com/user/profile/5db40df20000000001009532" target="_blank" rel="noopener" class="social-btn xhs" aria-label="小红书"><span>小红书</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 More Than Fl0wers · All rights reserved.</p></div>
+  </footer>
+
+</body>
+</html>

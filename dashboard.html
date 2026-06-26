@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8" />
+  <title>My Account — More Than Fl0wers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="icon" href="images/logo.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://use.typekit.net/ufc8obc.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+
+  <script defer src="js/api.js"></script>
+  <script defer src="js/toast.js"></script>
+  <script defer src="js/header.js"></script>
+  <script defer src="js/account.js"></script>
+</head>
+<body>
+
+  <div class="top-bar">
+    <button class="top-bar-btn" id="searchToggle" aria-label="Open search">SEARCH</button>
+    <a href="index.html" class="logo">More Than Fl0wers</a>
+    <div class="top-bar-right">
+      <a href="account.html" class="top-bar-btn" id="accountLink" aria-label="Account">ACCOUNT</a>
+      <button class="icon-btn" aria-label="Wishlist">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
+      </button>
+      <button class="icon-btn cart-btn" aria-label="Cart">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+    </div>
+  </div>
+
+  <header class="site-header" id="siteHeader">
+    <nav class="main-nav" aria-label="Primary navigation">
+      <a href="index.html"   class="nav-link">HOME</a>
+      <a href="flowers.html" class="nav-link">FLOWERS</a>
+      <a href="booking.html" class="nav-link">BOOKING</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="mobile-nav" id="mobileNav" aria-hidden="true">
+      <a href="index.html"   class="nav-link">HOME</a>
+      <a href="flowers.html" class="nav-link">FLOWERS</a>
+      <a href="booking.html" class="nav-link">BOOKING</a>
+    </div>
+  </header>
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <button class="search-close" id="searchClose" aria-label="Close">✕</button>
+    <div class="search-form">
+      <input type="text" class="search-input" placeholder="Search flowers…" aria-label="Search" />
+      <div class="search-results"></div>
+    </div>
+  </div>
+
+  <main class="account-main">
+    <div class="dash-wrap" id="dashRoot">
+
+      <div class="dash-head">
+        <h1 class="dash-greet">Hi, <span id="dashGreetName">there</span></h1>
+        <button class="dash-logout" id="logoutBtn">Sign Out</button>
+      </div>
+
+      <div class="dash-grid">
+
+        <!-- PROFILE -->
+        <div class="dash-card">
+          <h3>My Profile</h3>
+          <form id="profileForm">
+            <div class="dash-profile-row"><label>Full Name</label><input type="text" id="profName" required /></div>
+            <div class="dash-profile-row"><label>Email</label><input type="email" id="profEmail" disabled /></div>
+            <div class="dash-profile-row"><label>Phone</label><input type="tel" id="profPhone" /></div>
+            <div class="dash-profile-row"><label>Address</label><input type="text" id="profAddress" /></div>
+            <button type="submit" class="dash-save">Save Changes</button>
+          </form>
+        </div>
+
+        <!-- ORDER HISTORY -->
+        <div class="dash-card">
+          <h3>Order History</h3>
+          <div class="order-list" id="orderList">
+            <p class="dash-empty">Loading your orders…</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo">
+          <img src="images/logo-white.png" alt="M0re Than Fl0wers logo" />
+        </a>
+        <p>Handcrafted yarn flowers<br />made to last a lifetime.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Navigate</h4>
+        <ul><li><a href="index.html">Home</a></li><li><a href="flowers.html">Flowers</a></li><li><a href="booking.html">Booking</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Info</h4>
+        <ul><li><a href="#">About Us</a></li><li><a href="#">FAQ</a></li><li><a href="#">Contact</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Follow Us</h4>
+        <div class="social-row">
+          <a href="https://www.instagram.com/m0re.than.flowers/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="Facebook">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" class="social-btn xhs" aria-label="小红书"><span>小红书</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 More Than Fl0wers · All rights reserved.</p></div>
+  </footer>
+
+</body>
+</html>
