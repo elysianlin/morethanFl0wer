@@ -5,7 +5,7 @@
  * cart badge, sticky-nav shadow, and the global image-fallback
  * handler that replaced every inline onerror="" attribute.
  */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── 1. Mark page as JS-loaded (enables reveal hiding) ── */
   document.documentElement.classList.add('js-loaded');
@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ── 6. Account state (logged-in name vs. login link) ──── */
   const accountLink = document.getElementById('accountLink');
   if (accountLink && window.api) {
+    if (api.auth.ready) await api.auth.ready;
     const user = api.auth.currentUser();
     if (user) {
       accountLink.textContent = `HI, ${user.fullName.split(' ')[0].toUpperCase()}`;
@@ -142,25 +143,70 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  /* ── 7. Cart badge ──────────────────────────────────────── */
-  const badge = document.querySelector('.cart-badge');
-  if (badge) {
-    let count = parseInt(sessionStorage.getItem('cartCount') || '0', 10);
-    const update = () => {
-      badge.textContent = count;
-      badge.style.display = count > 0 ? 'flex' : 'none';
-    };
-    update();
+  /* ── 7. Cart + wishlist badges ──────────────────────────────
+     Both badges are driven by js/api.js (cart/wishlist live in
+     localStorage, keyed to the current customer or guest id), so
+     counts are accurate even after a refresh or a new page load —
+     no more sessionStorage counter that resets itself.            */
+  const cartBadge      = document.querySelector('.cart-badge');
+  const wishlistBadge  = document.querySelector('.wishlist-badge');
+  const wishlistLink   = document.querySelector('.wishlist-link');
 
-    window.addToCart = (qty = 1) => {
-      count += qty;
-      sessionStorage.setItem('cartCount', count);
-      update();
-      badge.classList.remove('pop');
-      void badge.offsetWidth;
-      badge.classList.add('pop');
-    };
-  }
+  const bump = (el) => {
+    if (!el) return;
+    el.classList.remove('pop');
+    void el.offsetWidth;
+    el.classList.add('pop');
+  };
+
+  const paintBadge = (el, count) => {
+    if (!el) return;
+    el.textContent = count;
+    el.style.display = count > 0 ? 'flex' : 'none';
+  };
+
+  /** Re-reads counts from api.js and repaints both badges. Exposed
+   *  globally so flowers.js / flower-detail.js / home.js / cart.js
+   *  can call it right after they change the cart or wishlist.    */
+  window.refreshHeaderBadges = ({ animateCart = false, animateWishlist = false } = {}) => {
+    if (!window.api) return;
+    paintBadge(cartBadge, api.cart.count());
+    paintBadge(wishlistBadge, api.wishlist.count());
+    if (animateCart) bump(cartBadge);
+    if (animateWishlist) bump(wishlistBadge);
+  };
+
+  if (wishlistLink) wishlistLink.href = 'wishlist.html';
+  window.refreshHeaderBadges();
+
+  /* ── 7b. Like buttons — any element with [data-like-id] ────
+     Works on shop cards, the home grid, and the detail page alike.
+     Markup is injected by each page's own JS (flowers.js, home.js,
+     flower-detail.js); this single delegated listener handles all
+     of them so the click logic only has to exist once.            */
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-like-id]');
+    if (!btn || !window.api) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const { liked, count } = api.wishlist.toggle(btn.dataset.likeId);
+    btn.classList.toggle('liked', liked);
+    btn.setAttribute('aria-pressed', String(liked));
+    window.refreshHeaderBadges({ animateWishlist: true });
+    if (window.Toast) {
+      liked ? Toast.success('Added to wishlist') : Toast.info('Removed from wishlist');
+    }
+    // On the wishlist page itself, unliking an item removes its card immediately.
+    if (!liked && document.getElementById('wishlistGrid')) {
+      const card = btn.closest('[data-wishlist-card]');
+      card?.remove();
+      if (count === 0) {
+        document.getElementById('wishlistGrid').style.display = 'none';
+        document.getElementById('wishlistEmpty').style.display = 'block';
+      }
+    }
+  });
 
   /* ── 8. Hero slide counter (home page only) ────────────── */
   const countEl = document.querySelector('.hero-count');

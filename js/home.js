@@ -13,11 +13,15 @@
 function buildProductCard(flower, delayClass = '') {
   const article = document.createElement('article');
   article.className = `product-card reveal ${delayClass}`.trim();
+  const liked = window.api ? api.wishlist.has(flower.id) : false;
   article.innerHTML = `
     <a href="flower-detail.html?id=${encodeURIComponent(flower.id)}" class="product-link">
       <div class="product-img-wrap" data-img-wrap>
         <img src="${flower.image}" alt="${escapeHtml(flower.name)}" class="product-img" />
         <div class="product-placeholder" aria-hidden="true"></div>
+        <button type="button" class="like-btn${liked ? ' liked' : ''}" data-like-id="${flower.id}" aria-pressed="${liked}" aria-label="Like ${escapeHtml(flower.name)}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
+        </button>
       </div>
       <p class="product-name">${escapeHtml(flower.name)}</p>
       <p class="product-price">$${flower.priceMin.toFixed(2)} – $${flower.priceMax.toFixed(2)}</p>
@@ -29,6 +33,8 @@ function buildProductCard(flower, delayClass = '') {
 async function renderFeaturedFlowers() {
   const grid = document.getElementById('bestSellingGrid');
   if (!grid) return;
+
+  if (window.api?.auth?.ready) await api.auth.ready;
 
   try {
     const res = await fetch('data/flowers.json');

@@ -68,7 +68,7 @@
 }
 .icon-btn:hover { color: var(--sage); }
 
-.cart-badge {
+.cart-badge, .wishlist-badge {
   position: absolute;
   top: 2px; right: 2px;
   width: 14px; height: 14px;
@@ -85,7 +85,7 @@
   45%  { transform: scale(1.5); }
   100% { transform: scale(1); }
 }
-.cart-badge.pop { animation: badgePop 0.35s ease; }
+.cart-badge.pop, .wishlist-badge.pop { animation: badgePop 0.35s ease; }
 
 /* ══════════════════════════════════════════════════════════
    MAIN NAV

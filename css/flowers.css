@@ -283,6 +283,23 @@
   letter-spacing: 0.04em;
 }
 
+.fcard-add {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px;
+  font-family: var(--body);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  transition: all 0.2s;
+}
+.fcard-add:hover { border-color: var(--text); background: var(--text); color: var(--white); }
+
 /* ── Empty state ─────────────────────────────────────── */
 .empty-state {
   text-align: center;

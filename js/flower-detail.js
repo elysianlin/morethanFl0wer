@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
 
+  if (window.api?.auth?.ready) await api.auth.ready;
+
   const COLOR_HEX = {
     white: '#ffffff', red: '#b71a12', pink: '#e66565', purple: '#D4B8E0',
     green: '#176e1d', yellow: '#F5C842', orange: '#ea8e17', blue: '#4493c0', dark: '#2C2C2C',
@@ -77,6 +79,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <div class="detail-actions">
           <button class="btn btn-solid" id="addToCartBtn">Add to Cart</button>
+          <button type="button" class="like-btn inline" data-like-id="${flower.id}" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
+            <span id="likeBtnLabel">Save</span>
+          </button>
           <a href="booking.html" class="btn btn-outline">Book a Custom Bouquet</a>
         </div>
       </div>
@@ -93,9 +99,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── Add to cart ────────────────────────────────────────── */
   document.getElementById('addToCartBtn')?.addEventListener('click', () => {
-    window.addToCart?.(1);
+    if (window.api) {
+      api.cart.add(flower, 1);
+      window.refreshHeaderBadges?.({ animateCart: true });
+    }
     if (window.Toast) Toast.success('Added to cart', `${flower.name} is in your cart.`);
   });
+
+  /* ── Like button — set its initial state, then header.js's
+     delegated listener handles the actual click/toggle.       */
+  const likeBtn = root.querySelector('.like-btn');
+  if (likeBtn && window.api) {
+    const liked = api.wishlist.has(flower.id);
+    likeBtn.classList.toggle('liked', liked);
+    likeBtn.setAttribute('aria-pressed', String(liked));
+    document.getElementById('likeBtnLabel').textContent = liked ? 'Saved' : 'Save';
+    likeBtn.addEventListener('click', () => {
+      // Run after header.js's listener has flipped the class.
+      setTimeout(() => {
+        document.getElementById('likeBtnLabel').textContent = likeBtn.classList.contains('liked') ? 'Saved' : 'Save';
+      }, 0);
+    });
+  }
 
   /* ── Related flowers (same category, excluding self) ────── */
   const relatedGrid = document.getElementById('relatedGrid');

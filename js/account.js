@@ -3,7 +3,9 @@
  * Dashboard profile + order history (dashboard.html).
  * All persistence goes through window.api (js/api.js).
  */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+
+  if (window.api?.auth?.ready) await api.auth.ready;
 
   /* ════════════════════════════════════════════════════════
      LOGIN / REGISTER PAGE

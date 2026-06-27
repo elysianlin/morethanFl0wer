@@ -420,6 +420,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   /* ── Prefill checkout form if logged in ─────────────────── */
+  if (window.api?.auth?.ready) await api.auth.ready;
   const currentUser = window.api ? api.auth.currentUser() : null;
   if (currentUser) {
     const fullNameEl = document.querySelector('input[name="fullName"]');

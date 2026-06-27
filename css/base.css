@@ -107,6 +107,39 @@ p { line-height: 1.75; }
 [data-img-wrap] { position: relative; background: var(--cream-mid); overflow: hidden; }
 [data-img-wrap].no-img img { display: none; }
 
+/* ── Like button (heart) — reused on shop cards, home cards,
+   the detail page, and the wishlist page. Toggled by the single
+   delegated click listener in header.js via [data-like-id].   ── */
+.like-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  z-index: 2;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(44,44,44,0.15);
+  transition: transform 0.15s, color 0.2s, background 0.2s;
+}
+.like-btn:hover { transform: scale(1.1); }
+.like-btn svg { width: 16px; height: 16px; transition: fill 0.2s, stroke 0.2s; }
+.like-btn.liked { color: #c0392b; }
+.like-btn.liked svg { fill: #c0392b; stroke: #c0392b; }
+
+.like-btn.inline {
+  position: static;
+  width: auto; height: auto;
+  background: transparent;
+  box-shadow: none;
+  gap: 8px;
+  border: 1.5px solid var(--border);
+  padding: 12px 28px;
+  border-radius: 0;
+}
+.like-btn.inline svg { width: 15px; height: 15px; }
+.like-btn.inline span { font-family: var(--body); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+
 /* ── Skeleton loading shimmer (used while JSON data loads) ── */
 .skeleton {
   background: linear-gradient(90deg, var(--cream-mid) 25%, var(--border) 37%, var(--cream-mid) 63%);

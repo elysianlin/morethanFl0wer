@@ -36,6 +36,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (!grid) return;
 
+  if (window.api?.auth?.ready) await api.auth.ready;
+
   /* ════════════════════════════════════════════════════════
      1. LOAD DATA
   ════════════════════════════════════════════════════════ */
@@ -63,19 +65,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     article.dataset.color = flower.colors.join(' ');
     article.dataset.id    = flower.id;
 
+    const liked = window.api ? api.wishlist.has(flower.id) : false;
+
     article.innerHTML = `
       <a href="flower-detail.html?id=${encodeURIComponent(flower.id)}" class="fcard-link">
         <div class="fcard-img-wrap" data-img-wrap>
           <img src="${flower.image}" alt="${escapeHtml(flower.name)}" class="fcard-img" />
           <div class="fcard-overlay"><span>View Details</span></div>
+          <button type="button" class="like-btn${liked ? ' liked' : ''}" data-like-id="${flower.id}" aria-pressed="${liked}" aria-label="Like ${escapeHtml(flower.name)}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
+          </button>
         </div>
         <p class="fcard-name">${escapeHtml(flower.name)}</p>
         <p class="fcard-price">$${flower.priceMin.toFixed(2)} – $${flower.priceMax.toFixed(2)}</p>
-      </a>`;
+      </a>
+      <button type="button" class="fcard-add" data-add-cart-id="${flower.id}">Add to Cart</button>`;
 
     article.querySelector('img').addEventListener('error', () => {
       article.querySelector('[data-img-wrap]')?.classList.add('no-img');
     }, { once: true });
+
+    article.querySelector('[data-add-cart-id]').addEventListener('click', (e) => {
+      e.preventDefault();
+      api.cart.add(flower, 1);
+      window.refreshHeaderBadges?.({ animateCart: true });
+      Toast?.success('Added to cart', `${flower.name} is in your cart.`);
+    });
 
     return article;
   };

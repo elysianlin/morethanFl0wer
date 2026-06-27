@@ -14,9 +14,13 @@
  * would change from "read/write localStorage" to "fetch('/api/…')".
  *
  * STORAGE KEYS
- *   mtf_customers  → array of customer records (the "users" table)
- *   mtf_orders     → array of order records     (the "orders" table)
- *   mtf_session    → { customerId } of whoever is currently logged in
+ *   mtf_customers      → array of customer records (the "users" table)
+ *   mtf_orders         → array of order records     (the "orders" table)
+ *   mtf_session        → { customerId } of whoever is currently logged in
+ *   mtf_guest_id       → a persistent anonymous id for this browser, used
+ *                        so a guest's cart/wishlist survive a page refresh
+ *   mtf_wishlist_<id>  → array of flower ids liked by that customer/guest
+ *   mtf_cart_<id>      → array of { flowerId, name, price, image, qty }
  *
  * SECURITY NOTE
  *   Passwords are hashed with a tiny non-cryptographic hash purely so
@@ -32,6 +36,9 @@
     customers: 'mtf_customers',
     orders:    'mtf_orders',
     session:   'mtf_session',
+    guestId:   'mtf_guest_id',
+    wishlist:  (ownerId) => `mtf_wishlist_${ownerId}`,
+    cart:      (ownerId) => `mtf_cart_${ownerId}`,
   };
 
   /* ── tiny local "DB" read/write helpers ────────────────── */
@@ -79,6 +86,51 @@
     return safe;
   };
 
+  /**
+   * Cart and wishlist need *some* owner key even for a signed-out
+   * shopper, so guests get a stable random id stored once per browser.
+   * Once they sign in, ownerId() switches to their real customer id.
+   */
+  const getGuestId = () => {
+    let id = localStorage.getItem(KEYS.guestId);
+    if (!id) {
+      id = makeId('guest');
+      localStorage.setItem(KEYS.guestId, id);
+    }
+    return id;
+  };
+
+  const ownerId = () => {
+    const user = auth.currentUser();
+    return user ? user.id : getGuestId();
+  };
+
+  /** When a guest signs in/registers, fold their guest cart + wishlist into their account. */
+  const mergeGuestDataInto = (customerId) => {
+    const guestId = localStorage.getItem(KEYS.guestId);
+    if (!guestId || guestId === customerId) return;
+
+    const guestCart = readTable(KEYS.cart(guestId));
+    if (guestCart.length) {
+      const userCart = readTable(KEYS.cart(customerId));
+      guestCart.forEach((item) => {
+        const existing = userCart.find((i) => i.flowerId === item.flowerId);
+        if (existing) existing.qty += item.qty;
+        else userCart.push(item);
+      });
+      writeTable(KEYS.cart(customerId), userCart);
+      writeTable(KEYS.cart(guestId), []);
+    }
+
+    const guestWishlist = readTable(KEYS.wishlist(guestId));
+    if (guestWishlist.length) {
+      const userWishlist = readTable(KEYS.wishlist(customerId));
+      const merged = Array.from(new Set([...userWishlist, ...guestWishlist]));
+      writeTable(KEYS.wishlist(customerId), merged);
+      writeTable(KEYS.wishlist(guestId), []);
+    }
+  };
+
   /* ════════════════════════════════════════════════════════
      AUTH
   ════════════════════════════════════════════════════════ */
@@ -114,6 +166,7 @@
       customers.push(customer);
       writeTable(KEYS.customers, customers);
       writeTable(KEYS.session, { customerId: customer.id });
+      mergeGuestDataInto(customer.id);
 
       return { ok: true, customer: sanitizeCustomer(customer) };
     },
@@ -129,6 +182,7 @@
         return { ok: false, error: 'Email or password is incorrect.' };
       }
       writeTable(KEYS.session, { customerId: customer.id });
+      mergeGuestDataInto(customer.id);
       return { ok: true, customer: sanitizeCustomer(customer) };
     },
 
@@ -150,6 +204,15 @@
     isLoggedIn() {
       return !!auth.currentUser();
     },
+
+    /**
+     * Resolves once we know who (if anyone) is signed in.
+     * For this localStorage backend that's instant. It exists so
+     * call sites can write `await api.auth.ready;` once and work
+     * unmodified against the Supabase version too, where the very
+     * first session check is a real network round trip.
+     */
+    ready: Promise.resolve(),
   };
 
   /* ════════════════════════════════════════════════════════
@@ -219,7 +282,99 @@
   };
 
   /* ════════════════════════════════════════════════════════
+     WISHLIST ("Like") — keyed by logged-in customer, or a
+     stable per-browser guest id if no one is signed in.
+  ════════════════════════════════════════════════════════ */
+  const wishlist = {
+    /** Sync — safe to call on every page load to paint heart icons. */
+    list() {
+      return readTable(KEYS.wishlist(ownerId()));
+    },
+
+    has(flowerId) {
+      return wishlist.list().includes(flowerId);
+    },
+
+    /** Sync — total liked items, for the header badge. */
+    count() {
+      return wishlist.list().length;
+    },
+
+    /** Toggle like on/off. Returns the new state synchronously (no network, no need to await). */
+    toggle(flowerId) {
+      const key = KEYS.wishlist(ownerId());
+      const current = readTable(key);
+      const liked = current.includes(flowerId);
+      const next = liked ? current.filter((id) => id !== flowerId) : [...current, flowerId];
+      writeTable(key, next);
+      return { liked: !liked, count: next.length };
+    },
+
+    remove(flowerId) {
+      const key = KEYS.wishlist(ownerId());
+      const next = readTable(key).filter((id) => id !== flowerId);
+      writeTable(key, next);
+      return next;
+    },
+  };
+
+  /* ════════════════════════════════════════════════════════
+     CART — same owner-key pattern as wishlist. Holds enough
+     of each flower's info to render the cart page without a
+     second fetch of flowers.json.
+  ════════════════════════════════════════════════════════ */
+  const cart = {
+    list() {
+      return readTable(KEYS.cart(ownerId()));
+    },
+
+    /** Sync — total quantity across all line items, for the header badge. */
+    count() {
+      return cart.list().reduce((sum, item) => sum + item.qty, 0);
+    },
+
+    subtotal() {
+      return cart.list().reduce((sum, item) => sum + item.price * item.qty, 0);
+    },
+
+    /** Add a flower to the cart, merging quantity if it's already in there. */
+    add(flower, qty = 1) {
+      const key = KEYS.cart(ownerId());
+      const items = readTable(key);
+      const existing = items.find((i) => i.flowerId === flower.id);
+      if (existing) {
+        existing.qty += qty;
+      } else {
+        items.push({ flowerId: flower.id, name: flower.name, price: flower.priceMin, image: flower.image, qty });
+      }
+      writeTable(key, items);
+      return { items, count: cart.count() };
+    },
+
+    setQty(flowerId, qty) {
+      const key = KEYS.cart(ownerId());
+      const items = readTable(key);
+      const item = items.find((i) => i.flowerId === flowerId);
+      if (!item) return items;
+      item.qty = Math.max(1, Math.min(20, qty));
+      writeTable(key, items);
+      return items;
+    },
+
+    remove(flowerId) {
+      const key = KEYS.cart(ownerId());
+      const items = readTable(key).filter((i) => i.flowerId !== flowerId);
+      writeTable(key, items);
+      return items;
+    },
+
+    clear() {
+      writeTable(KEYS.cart(ownerId()), []);
+    },
+  };
+
+  /* ════════════════════════════════════════════════════════
      EXPORT — single global `api` object used by every page
   ════════════════════════════════════════════════════════ */
-  global.api = { auth, customers, orders };
+  global.api = { auth, customers, orders, wishlist, cart };
 })(window);
