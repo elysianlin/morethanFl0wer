@@ -333,6 +333,30 @@ const cart = {
 };
 
 /* ════════════════════════════════════════════════════════
+   CONTACT — write-only from the browser's point of view;
+   see sql/schema.sql's "messages" table + RLS policy.
+════════════════════════════════════════════════════════ */
+const contact = {
+  async send({ name, email, subject, message }) {
+    if (!name || !email || !message) {
+      return { ok: false, error: 'Name, email and message are required.' };
+    }
+    if (!isValidEmail(email)) return { ok: false, error: 'Please enter a valid email address.' };
+
+    const { data, error } = await supabase
+      .from('messages')
+      .insert({
+        customer_id: _cachedUser ? _cachedUser.id : null,
+        name, email, subject: subject || '', message,
+      })
+      .select()
+      .single();
+    if (error) return { ok: false, error: error.message };
+    return { ok: true, message: { id: data.id, ...data } };
+  },
+};
+
+/* ════════════════════════════════════════════════════════
    EXPORT — same global `api` object every page already uses
 ════════════════════════════════════════════════════════ */
-window.api = { auth, customers, orders, wishlist, cart };
+window.api = { auth, customers, orders, wishlist, cart, contact };

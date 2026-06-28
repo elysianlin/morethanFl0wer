@@ -116,3 +116,29 @@ create policy "Customers manage their own cart"
   on public.cart_items for all
   using (auth.uid() = customer_id)
   with check (auth.uid() = customer_id);
+
+
+The Spark
+
+One bouquet, made for someone specific
+No shop, no plan — just yarn, a hook, and a reason to make something that wouldn't wilt before the moment it was meant for.
+
+Word Got Around
+
+Friends started asking for their own
+What began as one gift turned into a small, steady stream of requests — each one a little more specific about flower, color, and occasion than the last.
+
+Building the Process
+
+From one-offs to a real catalog
+We started cataloguing flower types, colors, and combinations so every request didn't have to start from scratch — the foundation of the build-your-own bouquet builder you can use today.
+
+Today
+
+A full shop, still made by hand
+Every order — fully customized, from a template, or left up to us as a surprise — is still handmade, one stitch at a time, the same way the very first bouquet was.
+
+What's Next
+
+More flowers, more occasions, more colors
+We're always expanding the catalog of flowers, fillers, and foliage available to customize — if there's a flower you wish we carried, the Contact page is the fastest way to tell us.

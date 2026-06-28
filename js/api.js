@@ -374,7 +374,38 @@
   };
 
   /* ════════════════════════════════════════════════════════
+     CONTACT — messages sent through contact.html. Stored so
+     the business can retrieve them later, same spirit as orders.
+  ════════════════════════════════════════════════════════ */
+  const contact = {
+    async send({ name, email, subject, message }) {
+      await wait(280);
+      if (!name || !email || !message) {
+        return { ok: false, error: 'Name, email and message are required.' };
+      }
+      if (!isValidEmail(email)) {
+        return { ok: false, error: 'Please enter a valid email address.' };
+      }
+      const current = auth.currentUser();
+      const entry = {
+        id: makeId('msg'),
+        customerId: current ? current.id : null,
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        subject: (subject || '').trim(),
+        message: message.trim(),
+        createdAt: new Date().toISOString(),
+      };
+      const key = 'mtf_messages';
+      const all = readTable(key);
+      all.unshift(entry);
+      writeTable(key, all);
+      return { ok: true, message: entry };
+    },
+  };
+
+  /* ════════════════════════════════════════════════════════
      EXPORT — single global `api` object used by every page
   ════════════════════════════════════════════════════════ */
-  global.api = { auth, customers, orders, wishlist, cart };
+  global.api = { auth, customers, orders, wishlist, cart, contact };
 })(window);

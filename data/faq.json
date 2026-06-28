@@ -1,0 +1,37 @@
+{
+  "categories": [
+    {
+      "title": "Ordering & Customization",
+      "items": [
+        { "q": "Are these real flowers?", "a": "No — every piece is hand-crocheted from premium yarn. They're designed to look and feel like real flowers, but they never wilt, never need water, and last for years with basic care." },
+        { "q": "Can I fully customize my bouquet?", "a": "Yes. The Booking page walks you through choosing your own main flowers, filler flowers, foliage, and colors — or you can pick a curated template, or let us surprise you based on your budget and occasion." },
+        { "q": "How long does a custom order take to make?", "a": "Most custom bouquets are handmade within 5–7 business days. Templates and in-stock single stems usually ship faster — check the specific item's availability on its detail page." },
+        { "q": "Can I change my order after placing it?", "a": "If your order hasn't entered production yet, contact us as soon as possible through the Contact page with your order number and we'll do our best to accommodate changes." }
+      ]
+    },
+    {
+      "title": "Delivery & Shipping",
+      "items": [
+        { "q": "What delivery options do you offer?", "a": "Standard delivery (3–5 business days, free), Express delivery (next day, $9.99), or in-store Pickup, all selectable at checkout." },
+        { "q": "Do you ship internationally?", "a": "Right now we ship within the country only. If you're ordering from abroad, reach out through the Contact page and we'll see what we can work out." },
+        { "q": "How are the flowers packaged?", "a": "Every bouquet is wrapped by hand in premium paper and shipped in a protective box so the crochet work arrives exactly as it left our hands." }
+      ]
+    },
+    {
+      "title": "Care & Quality",
+      "items": [
+        { "q": "How do I take care of my crochet flowers?", "a": "Keep them out of direct sunlight for long periods to preserve color, and dust gently with a soft brush every so often. No water, no sunlight requirements, no maintenance schedule needed." },
+        { "q": "Will the colors fade over time?", "a": "Our yarns are colorfast for normal indoor use. Years of direct, intense sunlight can lighten any dyed material, so we recommend keeping arrangements away from a sun-facing window if you want colors to stay vivid indefinitely." },
+        { "q": "Can I wash them if they get dusty?", "a": "Spot-clean only with a barely damp cloth. Avoid submerging the piece in water, since some components are wired or glued for shape." }
+      ]
+    },
+    {
+      "title": "Returns & Support",
+      "items": [
+        { "q": "What's your return policy?", "a": "Unused, undamaged items can be returned within 14 days of delivery. Fully customized bouquets are made-to-order and are final sale unless there's a defect — if something arrives damaged, contact us and we'll make it right." },
+        { "q": "My order arrived damaged — what do I do?", "a": "Please contact us within 48 hours of delivery with a photo of the issue and your order number, and we'll arrange a replacement or refund." },
+        { "q": "How do I track my order?", "a": "Sign in and visit your Dashboard to see every order you've placed and its current status." }
+      ]
+    }
+  ]
+}

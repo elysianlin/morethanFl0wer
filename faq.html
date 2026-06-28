@@ -2,19 +2,27 @@
 <html lang="en-us">
 <head>
   <meta charset="utf-8" />
-  <title>My Account — More Than Fl0wers</title>
+  <title>FAQ — More Than Fl0wers</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/main.css" />
   <link rel="icon" href="images/logo.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://use.typekit.net/ufc8obc.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
 
+  <!-- BACKEND — pick ONE. Local demo (default) needs no setup. -->
+  <script defer src="js/api.js"></script>
+  <!-- Using Supabase instead? Comment out the line above and
+       uncomment the line below (after filling in js/supabase-config.js).
   <script type="module" src="js/api.supabase.js"></script>
+  -->
   <script defer src="js/toast.js"></script>
   <script defer src="js/header.js"></script>
-  <script defer src="js/account.js"></script>
+  <script defer src="js/faq.js"></script>
 </head>
 <body>
 
@@ -24,17 +32,11 @@
     <div class="top-bar-right">
       <a href="account.html" class="top-bar-btn" id="accountLink" aria-label="Account">ACCOUNT</a>
       <a href="wishlist.html" class="icon-btn wishlist-link" aria-label="Wishlist">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/>
-        </svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21C12 21 3 14 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 6-9 13-9 13z"/></svg>
         <span class="wishlist-badge">0</span>
       </a>
       <a href="cart.html" class="icon-btn cart-btn" aria-label="Cart">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
         <span class="cart-badge">0</span>
       </a>
     </div>
@@ -64,38 +66,35 @@
     </div>
   </div>
 
-  <main class="account-main">
-    <div class="dash-wrap" id="dashRoot">
-
-      <div class="dash-head">
-        <h1 class="dash-greet">Hi, <span id="dashGreetName">there</span></h1>
-        <button class="dash-logout" id="logoutBtn">Sign Out</button>
+  <main>
+    <section class="info-hero">
+      <div class="container">
+        <p class="info-eyebrow">FAQ</p>
+        <h1 class="info-hero-title">Frequently Asked Questions</h1>
+        <p class="info-hero-sub">Everything about ordering, delivery, care, and returns —
+          search below or browse by category.</p>
       </div>
+    </section>
 
-      <div class="dash-grid">
+    <section class="info-main">
+      <div class="container info-narrow">
 
-        <!-- PROFILE -->
-        <div class="dash-card">
-          <h3>My Profile</h3>
-          <form id="profileForm">
-            <div class="dash-profile-row"><label>Full Name</label><input type="text" id="profName" required /></div>
-            <div class="dash-profile-row"><label>Email</label><input type="email" id="profEmail" disabled /></div>
-            <div class="dash-profile-row"><label>Phone</label><input type="tel" id="profPhone" /></div>
-            <div class="dash-profile-row"><label>Address</label><input type="text" id="profAddress" /></div>
-            <button type="submit" class="dash-save">Save Changes</button>
-          </form>
+        <div class="faq-search">
+          <input type="text" id="faqSearch" placeholder="Search questions… e.g. delivery, care, return" aria-label="Search FAQ" />
         </div>
 
-        <!-- ORDER HISTORY -->
-        <div class="dash-card">
-          <h3>Order History</h3>
-          <div class="order-list" id="orderList">
-            <p class="dash-empty">Loading your orders…</p>
-          </div>
+        <div id="faqRoot">
+          <!-- Rendered entirely from data/faq.json by js/faq.js -->
+        </div>
+        <p class="faq-empty" id="faqEmpty">No questions match your search.</p>
+
+        <div class="faq-cta">
+          <p>Still have a question?</p>
+          <a href="contact.html" class="btn btn-solid">Contact Us</a>
         </div>
 
       </div>
-    </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -108,7 +107,7 @@
       </div>
       <div class="footer-col">
         <h4 class="footer-heading">Navigate</h4>
-        <ul><li><a href="index.html">Home</a></li><li><a href="flowers.html">Flowers</a></li><li><a href="booking.html">Booking</a></li></ul>
+        <ul><li><a href="index.html">Home</a></li><li><a href="flowers.html">Flowers</a></li><li><a href="booking.html">Booking</a></li><li><a href="story.html">Our Story</a></li></ul>
       </div>
       <div class="footer-col">
         <h4 class="footer-heading">Info</h4>
@@ -117,12 +116,8 @@
       <div class="footer-col">
         <h4 class="footer-heading">Follow Us</h4>
         <div class="social-row">
-          <a href="https://www.instagram.com/m0re.than.flowers/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a href="#" class="social-btn" aria-label="Facebook">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-          </a>
+          <a href="https://www.instagram.com/m0re.than.flowers/" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="#" class="social-btn" aria-label="Facebook"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
           <a href="#" class="social-btn xhs" aria-label="小红书"><span>小红书</span></a>
         </div>
       </div>
