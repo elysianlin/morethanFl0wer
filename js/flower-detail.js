@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (window.api?.auth?.ready) await api.auth.ready;
 
   const COLOR_HEX = {
-    white: '#ffffff', red: '#b71a12', pink: '#e66565', purple: '#D4B8E0',
-    green: '#176e1d', yellow: '#F5C842', orange: '#ea8e17', blue: '#4493c0', dark: '#2C2C2C',
+    white: '#ffffff', red: '#A62B1F', pale_pink: '#D9B8B8', deep_pink: '#D16B5F' ,purple: '#D4B8E0',
+    green: '#176e1d', yellow: '#D9A05B', orange: '#BF4226', baby_blue:'#99CDF2',blue: '#3F6CA6', navy:'#141A40',dark: '#2C2C2C',
   };
 
   /* ── Load data ────────────────────────────────────────── */
