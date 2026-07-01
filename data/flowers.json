@@ -67,7 +67,7 @@
       "name": "Orange Blossom Calla Bouquet",
       "category": "bouquet",
       "priceMin": 110, "priceMax": 145,
-      "colors": ["white","orange","olive","lavender"],
+      "colors": ["white","orange","olive","pink"],
       "image": "https://res.cloudinary.com/ddib2y7zi/image/upload/f_auto,q_auto/best-5_d34xpw",
       "featured": true,
       "stock": 25,
