@@ -127,7 +127,7 @@
       "name": "Simply Pink Tulips",
       "category": "single",
       "priceMin": 35, "priceMax": 75,
-      "colors": ["yellow", "white", "pink"],
+      "colors": ["white", "pink"],
       "image": "https://res.cloudinary.com/ddib2y7zi/image/upload/f_auto,q_auto/flower-4_xpdnay",
       "featured": false,
       "stock": 7,
