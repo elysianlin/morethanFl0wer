@@ -114,29 +114,39 @@
       <!-- STEP 2A — FULLY CUSTOMIZED -->
       <section class="bstep" id="step2custom" style="display:none">
         <h1 class="bstep-title">Fully Customized</h1>
-        <p class="bstep-sub">Build your perfect bouquet step by step</p>
+        <p class="bstep-sub">First pick your color vibe, then build your bouquet</p>
 
+        <!-- 1. COLOR PALETTE -->
         <div class="bsection">
-          <h2 class="bsection-title">Select Main Flowers</h2>
-          <p class="bsection-hint">Choose 1–3 main flowers · Click to set colour &amp; quantity</p>
-          <!-- Cards built from data/booking-items.json → mainFlowers -->
-          <div class="addon-pick-grid" id="mainFlowersGrid"></div>
+          <h2 class="bsection-title">① Choose a Color Palette</h2>
+          <p class="bsection-hint">The overall mood of your bouquet — we'll work within this palette for all stems</p>
+          <div class="palette-grid" id="paletteGrid"></div>
         </div>
 
+        <!-- 2. MAIN FLOWERS — up to 3 types, unlimited qty, no per-stem color -->
         <div class="bsection">
-          <h2 class="bsection-title">Select Filler Flowers</h2>
-          <p class="bsection-hint">Click to choose colour &amp; quantity · Each variety adds to your total</p>
-          <div class="addon-pick-grid" id="fillerFlowersGrid"></div>
+          <h2 class="bsection-title">② Main Flowers <span class="main-flower-count" id="mainFlowerCount">0 / 3 types</span></h2>
+          <p class="bsection-hint">Pick up to <strong>3 flower types</strong> · Set quantity per type · Colors follow your palette above</p>
+          <div class="addon-pick-grid apick-simple-grid" id="mainFlowersGrid"></div>
         </div>
 
+        <!-- 3. FILLER FLOWERS — unlimited -->
         <div class="bsection">
-          <h2 class="bsection-title">Select Foliage</h2>
-          <p class="bsection-hint">Click to choose colour &amp; quantity</p>
-          <div class="addon-pick-grid" id="foliageGrid"></div>
+          <h2 class="bsection-title">③ Filler Flowers <span class="optional">（optional）</span></h2>
+          <p class="bsection-hint">Add as many varieties as you like · Set quantity per type</p>
+          <div class="addon-pick-grid apick-simple-grid" id="fillerFlowersGrid"></div>
         </div>
 
+        <!-- 4. FOLIAGE — unlimited -->
         <div class="bsection">
-          <h2 class="bsection-title">Purpose of Flowers</h2>
+          <h2 class="bsection-title">④ Foliage <span class="optional">（optional）</span></h2>
+          <p class="bsection-hint">Greenery and texture to frame your blooms</p>
+          <div class="addon-pick-grid apick-simple-grid" id="foliageGrid"></div>
+        </div>
+
+        <!-- 5. PURPOSE -->
+        <div class="bsection">
+          <h2 class="bsection-title">⑤ Purpose of Flowers</h2>
           <div class="radio-grid" id="purposeGrid"></div>
         </div>
 

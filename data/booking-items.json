@@ -49,19 +49,34 @@
         ["Purple", "#C9A0DC"],
         ["White","#ffffff"] ]
     },
-    { "value": "peony", "label": "Peony", "price": 6.50, "image": "https://picsum.photos/seed/peony-stem/300/300",
+    { "value": "peony", 
+      "label": "Peony", 
+      "price": 6.50, 
+      "image": "https://res.cloudinary.com/dtgwrqiei/image/upload/f_auto,q_auto/IMG_6530_uhicio",
       "colors": [["Pink","#f4a0a0"],["Hot Pink","#ff69b4"],["White","#ffffff"],["Blush","#F9D5D3"],["Coral","#FF6B6B"],["Red","#e63030"],["Peach","#FFCBA4"],["Magenta","#d63384"],["Burgundy","#800020"]] },
-    { "value": "sunflower", "label": "Sunflower", "price": 3.00, "image": "https://picsum.photos/seed/sunflower-stem/300/300",
+    
+    { "value": "sunflower", 
+      "label": "Sunflower", 
+      "price": 3.00, 
+      "image": "https://res.cloudinary.com/dtgwrqiei/image/upload/f_auto,q_auto/IMG_6537_mbqpxt",  
       "colors": [["Bright Yellow","#F5C842"],["Golden Yellow","#FFB800"],["Orange","#ea8e17"],["Cream","#FFF5E1"],["Pale Yellow","#fffacd"],["Brown Center","#c68642"]] },
-    { "value": "orchid", "label": "Orchid", "price": 8.00, "image": "https://picsum.photos/seed/orchid-stem/300/300",
-      "colors": [["White","#ffffff"],["Purple","#b07ed4"],["Deep Purple","#5c0f8b"],["Pink","#f4a0a0"],["Yellow","#F5C842"],["Peach","#FFCBA4"],["Green","#7DC85A"],["Blue","#4493c0"],["Spotted","#d4a5c9"]] },
-    { "value": "carnation", "label": "Carnation", "price": 6.00, "image": "https://picsum.photos/seed/carnation-stem/300/300",
+    
+    { "value": "carnation", 
+      "label": "Carnation", 
+      "price": 6.00, 
+      "image": "https://res.cloudinary.com/dtgwrqiei/image/upload/f_auto,q_auto/IMG_6539_ftoxu3",
       "colors": [["Red","#e63030"],["Pink","#f4a0a0"],["White","#ffffff"],["Purple","#b07ed4"],["Yellow","#F5C842"],["Peach","#FFCBA4"],["Coral","#FF6B6B"],["Burgundy","#800020"],["Bicolor","#f9a8d4"],["Green","#7DC85A"]] },
-    { "value": "lily-of-the-valley", "label": "Lily of the Valley", "price": 3.00, "image": "https://picsum.photos/seed/lotv-stem/300/300",
-      "colors": [["White","#ffffff"],["Pale Pink","#fce4ec"],["Blush","#F9D5D3"]] },
-    { "value": "hydrangea", "label": "Hydrangea", "price": 10.00, "image": "https://picsum.photos/seed/hydrangea-stem/300/300",
+    
+    { "value": "hydrangea", 
+      "label": "Hydrangea", 
+      "price": 10.00, 
+      "image": "https://res.cloudinary.com/dtgwrqiei/image/upload/f_auto,q_auto/IMG_6543_hrsqnz",
       "colors": [["Blue","#4493c0"],["Periwinkle","#9b8ec4"],["Pink","#f4a0a0"],["White","#ffffff"],["Purple","#b07ed4"],["Green","#7DC85A"],["Blush","#F9D5D3"],["Burgundy","#800020"],["Sky Blue","#87CEEB"]] },
-    { "value": "calla-lily", "label": "Calla Lily", "price": 5.50, "image": "https://picsum.photos/seed/callalily-stem/300/300",
+    
+    { "value": "calla-lily", 
+      "label": "Calla Lily", 
+      "price": 5.50, 
+      "image": "https://picsum.photos/seed/callalily-stem/300/300",
       "colors": [["White","#ffffff"],["Yellow","#F5C842"],["Pink","#f4a0a0"],["Purple","#b07ed4"],["Orange","#ea8e17"],["Black","#2C2C2C"],["Peach","#FFCBA4"],["Champagne","#f7e7ce"]] },
     { "value": "morning-glory", "label": "Morning Glory", "price": 5.50, "image": "https://picsum.photos/seed/morningglory-stem/300/300",
       "colors": [["Purple","#b07ed4"],["Blue","#4493c0"],["Pink","#f4a0a0"],["White","#ffffff"],["Magenta","#d63384"],["Bicolor Blue-White","#b3d9f5"]] },
@@ -70,6 +85,11 @@
   ],
 
   "fillers": [
+    { "value": "lily-of-the-valley", 
+      "label": "Lily of the Valley", 
+      "price": 3.00, 
+      "image": "https://res.cloudinary.com/dtgwrqiei/image/upload/f_auto,q_auto/1783590088082_isrrkf",  
+      "colors": [["White","#ffffff"],["Pale Pink","#fce4ec"],["Blush","#F9D5D3"]] },
     { "value": "babys-breath", "label": "Baby's Breath", "price": 1.20, "image": "https://picsum.photos/seed/babysbreath/300/300",
       "colors": [["White","#ffffff"],["Blush","#F9D5D3"],["Pink","#f4a0a0"],["Lilac","#D4B8E0"],["Purple","#b07ed4"]] },
     { "value": "plum-flower", "label": "Plum Flower", "price": 3.50, "image": "https://picsum.photos/seed/plumflower/300/300",
@@ -107,6 +127,69 @@
       "colors": [["Green","#176e1d"],["Sage","#C8D8C9"],["Dark Green","#1a3d1a"],["Burgundy Red","#800020"]] },
     { "value": "lucky-bamboo", "label": "Lucky Bamboo", "price": 1.00, "image": "https://picsum.photos/seed/luckybamboo/300/300",
       "colors": [["Green","#176e1d"],["Dark Green","#1a3d1a"],["Yellow-Green","#c8d48a"]] }
+  ],
+
+  "customColorPalettes": [
+    {
+      "value": "blush-romance",
+      "label": "Blush Romance",
+      "desc": "Soft pinks, blush & white",
+      "swatches": ["#c2dc80", "#ea9caf", "#d56989", "#f3eef1"]
+    },
+    {
+      "value": "classic-romance",
+      "label": "Classic Romance",
+      "desc": "Deep red, crimson & soft pink",
+      "swatches": ["#732224", "#cf6560", "#d4988e", "#ffffff"]
+    },
+    {
+      "value": "sunny-garden",
+      "label": "Sunny Garden",
+      "desc": "Bright yellow, orange & cream",
+      "swatches": ["#Fa9058", "#fecc64", "#fceabc", "#fff6eb"]
+    },
+    {
+      "value": "golden-hour",
+      "label": "Golden Hour",
+      "desc": "Gold, mustard, brown & warm cream",
+      "swatches": ["#F1C338", "#d47e30", "#895129", "#f9eede"]
+    },
+    {
+      "value": "midnight-bloom",
+      "label": "Midnight Bloom",
+      "desc": "Navy, steel blue & misty blue",
+      "swatches": ["#e7ecef", "#274c77", "#6096ba", "#a3cef1"]
+    },
+    {
+      "value": "lavender-dream",
+      "label": "Lavender Dream",
+      "desc": "Purple, lavender & soft lilac",
+      "swatches": ["#8e4585", "#C9A0DC", "#d3d3ff", "#ffffff"]
+    },
+    {
+      "value": "Pink-Blue",
+      "label": "Pink & Blue",
+      "desc": "Pink and blue shades with white",
+      "swatches": ["#8a9dc6", "#bfcae6", "#fce3dd", "#ebacaa"]
+    },
+    {
+      "value": "Momet-garden",
+      "label": "Momet Garden",
+      "desc": "Earthy greens and browns",
+      "swatches": ["#b4ccd2", "#79a3ce", "#f0dc84", "#f7f7e0"]
+    },
+    {
+      "value": "Colorful-Sunset",
+      "label": "Colorful Sunset",
+      "desc": "Vibrant sunset colors with warm tones",
+      "swatches": ["#eca0a0", "#e0e9a3", "#afcfc9", "#f7f7e0"]
+    },
+    {
+      "value": "Tropical-Paradise",
+      "label": "Tropical Paradise",
+      "desc": "Bright tropical colors with a lively feel",
+      "swatches": ["#f7ec8d", "#afa4cf", "#f5f4ed", "#f6a93a"]
+    }
   ],
 
   "templates": [

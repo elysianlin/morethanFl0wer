@@ -1,15 +1,12 @@
 /**
  * booking.js — Live-price booking wizard (JSON-driven rebuild)
- * ───────────────────────────────────────────────────────────────
- * Everything that used to be hardcoded <div class="apick"> markup
- * in booking.html is now built from data/booking-items.json by the
- * functions in section 2 below. booking.html only contains empty
- * grid containers (e.g. #mainFlowersGrid) for this script to fill.
  *
- * On "Place Order" the full selection is saved through window.api
- * (js/api.js) — a localStorage-backed stand-in for a real backend —
- * so every order (and the customer info that came with it) can be
- * retrieved later from the account dashboard.
+ * Step 2A "Fully Customized" new flow:
+ *   ① Color Palette  →  pick one mood/palette (mandatory)
+ *   ② Main Flowers   →  up to 3 TYPES, unlimited stems each
+ *   ③ Filler Flowers →  unlimited types & stems
+ *   ④ Foliage        →  unlimited types & stems
+ *   ⑤ Purpose        →  occasion radio
  */
 document.addEventListener('DOMContentLoaded', async () => {
 
@@ -33,15 +30,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   /* ── State ────────────────────────────────────────────── */
   const SEL = {
-    mainFlowers: {},
-    fillers:     {},
-    foliage:     {},
-    addons:      {},
-    delivery:    0,
+    palette:      null,   // { value, label }
+    mainFlowers:  {},     // { [value]: { price, qty, label } } — max 3 types
+    fillers:      {},
+    foliage:      {},
+    addons:       {},
+    delivery:     0,
     templateBase: 0,
-    orderType:   null,
-    purpose:     null,
-    budget:      null,
+    orderType:    null,
+    purpose:      null,
+    budget:       null,
     greetingMessage: '',
   };
 
@@ -51,11 +49,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const calcTotal = () => {
     let t = 0;
-    if (SEL.orderType === 'template') {
-      t += SEL.templateBase;
-    } else if (SEL.orderType === 'surprise') {
-      t += 45;
-    } else {
+    if (SEL.orderType === 'template')      t += SEL.templateBase;
+    else if (SEL.orderType === 'surprise') t += 45;
+    else {
       Object.values(SEL.mainFlowers).forEach(({ price, qty }) => t += price * qty);
       Object.values(SEL.fillers).forEach(({ price, qty }) => t += price * qty);
       Object.values(SEL.foliage).forEach(({ price, qty }) => t += price * qty);
@@ -66,8 +62,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   const refreshBadge = () => {
-    const total = calcTotal();
-    badgeAmt.textContent = `$${total.toFixed(2)}`;
+    if (!badge) return;
+    badgeAmt.textContent = `$${calcTotal().toFixed(2)}`;
     badge.classList.remove('bump');
     void badge.offsetWidth;
     badge.classList.add('bump');
@@ -75,77 +71,105 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   /* ════════════════════════════════════════════════════════
-     2. BUILDERS — turn JSON rows into clickable cards
+     2A. PALETTE CARDS  — Step 2A ①
+  ════════════════════════════════════════════════════════ */
+  const renderPaletteGrid = () => {
+    const grid = $('paletteGrid');
+    if (!grid || !ITEMS.customColorPalettes) return;
+
+    ITEMS.customColorPalettes.forEach((palette) => {
+      const card = document.createElement('div');
+      card.className = 'palette-card';
+      card.dataset.value = palette.value;
+
+      const swatchHTML = palette.swatches.map((hex) => {
+        const border = (hex === '#ffffff') ? 'border:1.5px solid #D8D4CC;' : '';
+        return `<span class="palette-swatch" style="background:${hex};${border}"></span>`;
+      }).join('');
+
+      card.innerHTML = `
+        <div class="palette-swatches">${swatchHTML}</div>
+        <p class="palette-name">${escapeHtml(palette.label)}</p>
+        <p class="palette-desc">${escapeHtml(palette.desc)}</p>
+        <span class="palette-check" aria-hidden="true">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </span>`;
+
+      card.addEventListener('click', () => {
+        QA('.palette-card').forEach((c) => c.classList.remove('selected'));
+        card.classList.add('selected');
+        SEL.palette = { value: palette.value, label: palette.label };
+        Toast?.info(`Palette: ${palette.label}`);
+      });
+
+      grid.appendChild(card);
+    });
+  };
+  renderPaletteGrid();
+
+  /* ════════════════════════════════════════════════════════
+     2B. APICK CARDS  — main flowers / fillers / foliage
+         No per-card colour picker — palette handles colour globally.
   ════════════════════════════════════════════════════════ */
 
-  /** One "apick" card: image + label + price + (on select) colour dots & qty stepper. */
-  const buildApickCard = (item, type, store) => {
+  /** Keep the "X / 3 types" counter next to the ② heading in sync. */
+  const updateMainFlowerCount = () => {
+    const counter = $('mainFlowerCount');
+    if (!counter) return;
+    const count = Object.keys(SEL.mainFlowers).length;
+    counter.textContent = `${count} / 3 types`;
+    counter.classList.toggle('at-limit', count >= 3);
+  };
+
+  const buildApickCard = (item, type, store, limit = null) => {
     const card = document.createElement('div');
     card.className = 'apick';
     card.dataset.value = item.value;
 
     card.innerHTML = `
-      <div class="apick-img" data-img-wrap><img src="${item.image}" alt="${escapeHtml(item.label)}" /><div class="apick-placeholder"></div></div>
+      <div class="apick-img" data-img-wrap>
+        <img src="${item.image}" alt="${escapeHtml(item.label)}" />
+        <div class="apick-placeholder"></div>
+      </div>
       <span class="apick-label">${escapeHtml(item.label)}</span>
-      <span class="apick-price">$${item.price.toFixed(2)} / ${type === 'foliage' ? 'sprig' : 'stem'}</span>`;
+      <span class="apick-price">$${item.price.toFixed(2)} / ${type === 'foliage' ? 'sprig' : 'stem'}</span>
+      <div class="apick-options">
+        <div class="apick-qty">
+          <button class="qty-btn" data-dir="-1" type="button">−</button>
+          <span class="qty-val">1</span>
+          <button class="qty-btn" data-dir="1" type="button">+</button>
+          <span class="qty-unit">${type === 'foliage' ? 'sprigs' : 'stems'}</span>
+        </div>
+        <div class="apick-subtotal"></div>
+      </div>`;
 
     card.querySelector('img').addEventListener('error', () => {
       card.querySelector('[data-img-wrap]')?.classList.add('no-img');
     }, { once: true });
 
-    const optionsDiv = document.createElement('div');
-    optionsDiv.className = 'apick-options';
+    const subEl    = card.querySelector('.apick-subtotal');
+    const qtyValEl = card.querySelector('.qty-val');
+    const getQty   = () => parseInt(qtyValEl.textContent) || 1;
 
-    const colorsDiv = document.createElement('div');
-    colorsDiv.className = 'apick-colors';
-    item.colors.forEach(([name, hex], i) => {
-      const dot = document.createElement('button');
-      dot.type = 'button';
-      dot.className = 'apick-col' + (i === 0 ? ' chosen' : '');
-      dot.dataset.c = name;
-      dot.style.background = hex;
-      if (hex.toLowerCase() === '#ffffff') dot.style.border = '1.5px solid #D8D4CC';
-      dot.title = name;
-      dot.setAttribute('aria-label', name);
-      colorsDiv.appendChild(dot);
-    });
-    optionsDiv.appendChild(colorsDiv);
-
-    const qtyDiv = document.createElement('div');
-    qtyDiv.className = 'apick-qty';
-    qtyDiv.innerHTML = `
-      <button class="qty-btn" data-dir="-1" type="button">−</button>
-      <span class="qty-val">1</span>
-      <button class="qty-btn" data-dir="1" type="button">+</button>
-      <span class="qty-unit">${type === 'foliage' ? 'sprigs' : 'stems'}</span>`;
-    optionsDiv.appendChild(qtyDiv);
-
-    const subEl = document.createElement('div');
-    subEl.className = 'apick-subtotal';
-    optionsDiv.appendChild(subEl);
-    card.appendChild(optionsDiv);
-
-    const getState = () => {
-      const chosen = card.querySelector('.apick-col.chosen');
-      const qty = parseInt(card.querySelector('.qty-val').textContent) || 1;
-      return { price: item.price, qty, color: chosen ? chosen.dataset.c : item.colors[0][0], label: item.label };
-    };
     const updateSub = () => {
-      const s = getState();
-      subEl.textContent = `${s.qty} × $${item.price.toFixed(2)} = $${(s.qty * item.price).toFixed(2)}`;
+      const qty = getQty();
+      subEl.textContent = `${qty} × $${item.price.toFixed(2)} = $${(qty * item.price).toFixed(2)}`;
     };
+
     const writeSel = (selected) => {
-      if (selected) store[item.value] = getState();
+      if (selected) store[item.value] = { price: item.price, qty: getQty(), label: item.label };
       else delete store[item.value];
       refreshBadge();
+      if (type === 'main') updateMainFlowerCount();
     };
 
     card.addEventListener('click', (e) => {
-      if (e.target.closest('.apick-col') || e.target.closest('.qty-btn')) return;
-
-      if (type === 'main' && !card.classList.contains('selected')) {
-        if (Object.keys(SEL.mainFlowers).length >= 3) {
-          Toast?.info('Limit reached', 'You can choose up to 3 main flowers.');
+      if (e.target.closest('.qty-btn')) return;
+      if (!card.classList.contains('selected')) {
+        if (limit !== null && Object.keys(store).length >= limit) {
+          Toast?.info('Limit reached', `You can choose up to ${limit} main flower types.`);
           return;
         }
       }
@@ -154,22 +178,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateSub();
     });
 
-    colorsDiv.querySelectorAll('.apick-col').forEach((dot) => {
-      dot.addEventListener('click', (e) => {
-        e.stopPropagation();
-        colorsDiv.querySelectorAll('.apick-col').forEach((d) => d.classList.remove('chosen'));
-        dot.classList.add('chosen');
-        if (card.classList.contains('selected')) writeSel(true);
-      });
-    });
-
-    qtyDiv.querySelectorAll('.qty-btn').forEach((btn) => {
+    card.querySelectorAll('.qty-btn').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const valEl = card.querySelector('.qty-val');
-        let cur = parseInt(valEl.textContent) || 1;
-        cur = Math.max(1, Math.min(20, cur + parseInt(btn.dataset.dir)));
-        valEl.textContent = cur;
+        let cur = getQty();
+        cur = Math.max(1, Math.min(99, cur + parseInt(btn.dataset.dir)));
+        qtyValEl.textContent = cur;
         if (card.classList.contains('selected')) writeSel(true);
         updateSub();
       });
@@ -179,17 +193,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     return card;
   };
 
-  const renderApickGroup = (containerId, items, type, store) => {
+  const renderApickGroup = (containerId, items, type, store, limit = null) => {
     const container = $(containerId);
     if (!container) return;
-    items.forEach((item) => container.appendChild(buildApickCard(item, type, store)));
+    items.forEach((item) => container.appendChild(buildApickCard(item, type, store, limit)));
   };
 
-  renderApickGroup('mainFlowersGrid',  ITEMS.mainFlowers, 'main',    SEL.mainFlowers);
+  renderApickGroup('mainFlowersGrid',   ITEMS.mainFlowers, 'main',    SEL.mainFlowers, 3);
   renderApickGroup('fillerFlowersGrid', ITEMS.fillers,     'filler',  SEL.fillers);
-  renderApickGroup('foliageGrid',       ITEMS.foliage,      'foliage', SEL.foliage);
+  renderApickGroup('foliageGrid',       ITEMS.foliage,     'foliage', SEL.foliage);
+  updateMainFlowerCount();
 
-  /** Template cards (Step 2B) */
+  /* ════════════════════════════════════════════════════════
+     2C. TEMPLATE GRID + COLOR THEME (Step 2B — unchanged)
+  ════════════════════════════════════════════════════════ */
   const templateGrid = $('templateGrid');
   if (templateGrid) {
     ITEMS.templates.forEach((t) => {
@@ -198,7 +215,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       label.dataset.price = t.price;
       label.innerHTML = `
         <input type="radio" name="template" value="${t.value}" hidden />
-        <div class="tcard-img" data-img-wrap><img src="${t.image}" alt="${escapeHtml(t.label)}" /><div class="tcard-placeholder"></div></div>
+        <div class="tcard-img" data-img-wrap>
+          <img src="${t.image}" alt="${escapeHtml(t.label)}" /><div class="tcard-placeholder"></div>
+        </div>
         <p class="tcard-name">${escapeHtml(t.label)}</p>
         <p class="tcard-sub">${escapeHtml(t.sub)}</p>
         <p class="tcard-price-tag">from $${t.price}</p>`;
@@ -206,14 +225,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         label.querySelector('[data-img-wrap]')?.classList.add('no-img');
       }, { once: true });
       label.querySelector('input').addEventListener('change', () => {
-        SEL.templateBase = t.price;
-        refreshBadge();
+        SEL.templateBase = t.price; refreshBadge();
       });
       templateGrid.appendChild(label);
     });
   }
 
-  /** Colour theme pills (Step 2B) */
   const colorThemeRow = $('colorThemeRow');
   if (colorThemeRow) {
     ITEMS.colorThemes.forEach((c) => {
@@ -226,7 +243,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  /** Purpose cards — used by both Step 2A (radio list) and Step 2C (pcard grid) */
+  /* Purpose — Step 2A ⑤ */
   const radioGrid = $('purposeGrid');
   if (radioGrid) {
     ITEMS.purposes.forEach((p) => {
@@ -237,6 +254,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       radioGrid.appendChild(label);
     });
   }
+
+  /* Purpose — Step 2C */
   const purposeSGrid = $('purposeSGrid');
   if (purposeSGrid) {
     ITEMS.purposes.forEach((p) => {
@@ -250,7 +269,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  /** Budget buttons (Step 2C) */
+  /* Budget — Step 2C */
   const budgetRow = $('budgetRow');
   if (budgetRow) {
     ITEMS.budgets.forEach((b) => {
@@ -262,7 +281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  /** Extra add-on checkboxes (vase / chocolates / teddy bear) — greeting card stays in HTML (has its own panel). */
+  /* Add-ons */
   const addonExtras = $('addonExtras');
   if (addonExtras) {
     ITEMS.addons.filter((a) => a.value !== 'greeting-card').forEach((a) => {
@@ -273,7 +292,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  /* Add-on change listener (delegated — covers both static + JS-built checkboxes) */
   document.addEventListener('change', (e) => {
     if (e.target.matches('input[name="addon"]')) {
       const cb = e.target;
@@ -327,58 +345,52 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   QA('[data-next]').forEach((btn) => {
     btn.addEventListener('click', () => {
+      if (btn.closest('#step2custom')) {
+        if (!SEL.palette) { Toast?.info('Choose a color palette', 'Pick a palette in ① before moving on.'); return; }
+        if (Object.keys(SEL.mainFlowers).length === 0) { Toast?.info('Choose a main flower', 'Select at least one flower type in ②.'); return; }
+      }
       if (btn.dataset.next === 'step4') buildCheckoutSummary();
       showStep(btn.dataset.next);
     });
   });
+
   QA('[data-back]').forEach((btn) => btn.addEventListener('click', () => showStep(btn.dataset.back)));
   $('step3Back')?.addEventListener('click', () => {
     showStep(SEL.orderType === 'custom' ? '2custom' : SEL.orderType === 'template' ? '2template' : '2surprise');
   });
 
-  /* ── Greeting card panel ─────────────────────────────────── */
+  /* ── Greeting card ─────────────────────────────────────── */
   const cbGreeting    = $('cbGreeting');
   const greetingPanel = $('greetingPanel');
   const greetingText  = $('greetingText');
   const greetingCount = $('greetingCount');
 
   cbGreeting?.addEventListener('change', () => {
-    if (cbGreeting.checked) {
-      greetingPanel.classList.add('open');
-      setTimeout(() => greetingText?.focus(), 50);
-    } else {
-      greetingPanel.classList.remove('open');
-    }
+    if (cbGreeting.checked) { greetingPanel.classList.add('open'); setTimeout(() => greetingText?.focus(), 50); }
+    else greetingPanel.classList.remove('open');
   });
   greetingText?.addEventListener('input', () => {
     const len = greetingText.value.length;
-    if (greetingCount) {
-      greetingCount.textContent = len;
-      greetingCount.parentElement.classList.toggle('warn', len > 180);
-    }
+    if (greetingCount) { greetingCount.textContent = len; greetingCount.parentElement.classList.toggle('warn', len > 180); }
     SEL.greetingMessage = greetingText.value;
   });
 
-  /* ── Delivery & payment ──────────────────────────────────── */
+  /* ── Delivery & payment ─────────────────────────────────── */
   QA('input[name="delivery"]').forEach((r) => {
-    r.addEventListener('change', () => {
-      SEL.delivery = r.value === 'express' ? 9.99 : 0;
-      refreshBadge();
-      buildCheckoutSummary();
-    });
+    r.addEventListener('change', () => { SEL.delivery = r.value === 'express' ? 9.99 : 0; refreshBadge(); buildCheckoutSummary(); });
   });
   QA('input[name="payment"]').forEach((r) => {
-    r.addEventListener('change', () => {
-      const cf = $('cardFields');
-      if (cf) cf.style.display = r.value === 'credit' ? '' : 'none';
-    });
+    r.addEventListener('change', () => { const cf = $('cardFields'); if (cf) cf.style.display = r.value === 'credit' ? '' : 'none'; });
   });
 
   /* ════════════════════════════════════════════════════════
      4. CHECKOUT SUMMARY
   ════════════════════════════════════════════════════════ */
   const buildCheckoutSummary = () => {
-    const titleEl = $('osSummaryTitle'), detailEl = $('osSummaryDetail'), linesEl = $('osPriceLines'), totalEl = $('osTotal');
+    const titleEl  = $('osSummaryTitle');
+    const detailEl = $('osSummaryDetail');
+    const linesEl  = $('osPriceLines');
+    const totalEl  = $('osTotal');
 
     if (titleEl) {
       const t = { custom: 'Fully Customized Bouquet', template: 'Template Bouquet', surprise: 'Surprise Bouquet' };
@@ -386,9 +398,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (detailEl) {
       const parts = [];
-      Object.entries(SEL.mainFlowers).forEach(([k, v]) => parts.push(`${cap(k)} (${v.color})`));
-      Object.entries(SEL.fillers).forEach(([k]) => parts.push(cap(k)));
-      Object.entries(SEL.foliage).forEach(([k]) => parts.push(cap(k)));
+      if (SEL.palette) parts.push(`Palette: ${SEL.palette.label}`);
+      Object.entries(SEL.mainFlowers).forEach(([k, v]) => parts.push(`${cap(k)} ×${v.qty}`));
+      Object.entries(SEL.fillers).forEach(([k, v]) => parts.push(`${cap(k)} ×${v.qty}`));
+      Object.entries(SEL.foliage).forEach(([k, v]) => parts.push(`${cap(k)} ×${v.qty}`));
       detailEl.textContent = parts.join(' · ') || 'Your selections';
     }
     if (linesEl) {
@@ -408,7 +421,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       Object.entries(SEL.addons).forEach(([k, p]) => line(cap(k === 'greeting-card' ? 'Greeting Card ✉' : k), p));
       if (SEL.delivery > 0) line('Express delivery', SEL.delivery);
-
       if (SEL.addons['greeting-card'] && SEL.greetingMessage) {
         const msgDiv = document.createElement('div');
         msgDiv.className = 'os-line os-greeting-msg';
@@ -419,77 +431,74 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (totalEl) totalEl.textContent = `$${calcTotal().toFixed(2)}`;
   };
 
-  /* ── Prefill checkout form if logged in ─────────────────── */
+  /* ── Prefill checkout form ─────────────────────────────── */
   if (window.api?.auth?.ready) await api.auth.ready;
   const currentUser = window.api ? api.auth.currentUser() : null;
   if (currentUser) {
-    const fullNameEl = document.querySelector('input[name="fullName"]');
-    const emailEl    = document.querySelector('input[name="email"]');
-    const phoneEl    = document.querySelector('input[name="phone"]');
-    const streetEl   = document.querySelector('input[name="street"]');
-    if (fullNameEl) fullNameEl.value = currentUser.fullName || '';
-    if (emailEl)    emailEl.value    = currentUser.email || '';
-    if (phoneEl)    phoneEl.value    = currentUser.phone || '';
-    if (streetEl)   streetEl.value   = currentUser.address || '';
+    const setVal = (name, val) => { const el = document.querySelector(`input[name="${name}"]`); if (el) el.value = val || ''; };
+    setVal('fullName', currentUser.fullName);
+    setVal('email',    currentUser.email);
+    setVal('phone',    currentUser.phone);
+    const streetEl = document.querySelector('input[name="street"]');
+    if (streetEl) streetEl.value = currentUser.address || '';
   }
 
   /* ════════════════════════════════════════════════════════
-     5. PLACE ORDER → saved through the localStorage "API"
+     5. PLACE ORDER
   ════════════════════════════════════════════════════════ */
   $('placeOrderBtn')?.addEventListener('click', async () => {
-    const fullName = document.querySelector('input[name="fullName"]')?.value.trim();
-    const email    = document.querySelector('input[name="email"]')?.value.trim();
-    const phone    = document.querySelector('input[name="phone"]')?.value.trim();
-    const delivery = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
+    const fullName  = document.querySelector('input[name="fullName"]')?.value.trim();
+    const email     = document.querySelector('input[name="email"]')?.value.trim();
+    const phone     = document.querySelector('input[name="phone"]')?.value.trim();
+    const delivery  = document.querySelector('input[name="delivery"]:checked')?.value || 'standard';
     const delivDate = document.querySelector('input[name="delivDate"]')?.value.trim();
     const delivTime = document.querySelector('select[name="delivTime"]')?.value;
-    const street = document.querySelector('input[name="street"]')?.value.trim();
-    const cityzip = document.querySelector('input[name="cityzip"]')?.value.trim();
-    const payment = document.querySelector('input[name="payment"]:checked')?.value || 'credit';
-    const cardMessage = document.querySelector('textarea[name="cardMessage"]')?.value.trim();
+    const street    = document.querySelector('input[name="street"]')?.value.trim();
+    const cityzip   = document.querySelector('input[name="cityzip"]')?.value.trim();
+    const payment   = document.querySelector('input[name="payment"]:checked')?.value || 'credit';
+    const cardMsg   = document.querySelector('textarea[name="cardMessage"]')?.value.trim();
 
-    if (!fullName || !email) {
-      Toast?.error('Missing information', 'Please fill in your name and email to continue.');
-      return;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Toast?.error('Invalid email', 'Please double-check your email address.');
-      return;
-    }
+    if (!fullName || !email) { Toast?.error('Missing information', 'Please fill in your name and email.'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { Toast?.error('Invalid email', 'Please double-check your email address.'); return; }
 
     const placeBtn = $('placeOrderBtn');
     placeBtn.disabled = true;
     placeBtn.textContent = 'Placing order…';
 
     const orderPayload = {
-      customer: { fullName, email, phone },
+      customer:  { fullName, email, phone },
       orderType: SEL.orderType,
       selections: {
-        mainFlowers: SEL.mainFlowers, fillers: SEL.fillers, foliage: SEL.foliage,
-        templateBase: SEL.templateBase, purpose: SEL.purpose, budget: SEL.budget,
+        palette:      SEL.palette,
+        mainFlowers:  SEL.mainFlowers,
+        fillers:      SEL.fillers,
+        foliage:      SEL.foliage,
+        templateBase: SEL.templateBase,
+        purpose:      SEL.purpose,
+        budget:       SEL.budget,
       },
-      addons: SEL.addons,
+      addons:          SEL.addons,
       greetingMessage: SEL.greetingMessage,
-      cardMessage,
+      cardMessage:     cardMsg,
       delivery: { method: delivery, date: delivDate, time: delivTime, street, cityzip },
-      payment: { method: payment },
-      total: calcTotal(),
+      payment:  { method: payment },
+      total:    calcTotal(),
     };
 
     try {
       const { ok, order, error } = await api.orders.create(orderPayload);
       if (!ok) throw new Error(error || 'Could not save order.');
-      Toast?.success('Order placed!', `Confirmation #${order.id.slice(-6).toUpperCase()} saved to your account.`);
+      Toast?.success('Order placed!', `Confirmation #${order.id.slice(-6).toUpperCase()} saved.`);
       showStep('success');
     } catch (err) {
       console.error(err);
-      Toast?.error('Order failed', 'Something went wrong saving your order. Please try again.');
+      Toast?.error('Order failed', 'Something went wrong. Please try again.');
       placeBtn.disabled = false;
       placeBtn.textContent = 'Place Order';
     }
   });
 
-  /* ── Boot ─────────────────────────────────────────────────── */
+  /* ── Boot ──────────────────────────────────────────────── */
   showStep('step1');
   refreshBadge();
 });
